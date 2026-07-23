@@ -1,0 +1,1403 @@
+ ==========================================
+  FoodPANDA // Restaurant Intelligence
+ ==========================================
+
+ [1] Run Scraper
+ [2] Start Dashboard
+ [3] Run Scraper + Dashboard
+
+Select (1-3): 3
+
+[SCRAPER] Running scraper first...
+============================================================
+  FoodPANDA Live Scraper
+============================================================
+
+--- Dhanmondi (lat=23.7465, lng=90.3742) ---
+  [list] Fetching offset=0...
+  [list] Got 40 restaurants (40/245 total)
+  [list] Fetching offset=40...
+  [list] Got 40 restaurants (80/245 total)
+  [list] Fetching offset=80...
+  [list] Got 40 restaurants (120/245 total)
+  [list] Fetching offset=120...
+  [list] Got 40 restaurants (160/245 total)
+  [list] Fetching offset=160...
+  [list] Got 40 restaurants (200/245 total)
+  [list] Fetching offset=200...
+  [list] Got 40 restaurants (240/245 total)
+  [list] Fetching offset=240...
+  [list] Got 5 restaurants (245/245 total)
+
+  [detail] Fetching menus for 245 restaurants...
+  [1/245] Chunk: 61 dishes
+  [2/245] Cheez - Dhanmondi: 43 dishes
+  [3/245] Snackerz - Dhanmondi: 14 dishes
+  [4/245] Domino's Dhanmondi-Late Night: 87 dishes
+  [5/245] Burger xpress - Dhanmondi: 22 dishes
+  [6/245] Uncle Bobo's - Dhanmondi: 8 dishes
+  [7/245] Boom Boom Burger: 26 dishes
+  [8/245] Haji Biriyani - Green Road: 28 dishes
+  [9/245] PizzaRonni: 11 dishes
+  [10/245] Blink- Dhanmondi: 11 dishes
+  [11/245] Snacks Snooks: 92 dishes
+  [12/245] Bite's Corn-Dog: 23 dishes
+  [13/245] Wellness Cafe - Dhanmondi: 37 dishes
+  [14/245] Hira’s Kitchen: 34 dishes
+  [15/245] Bom Boloni: 31 dishes
+  [16/245] Foody: 26 dishes
+  [17/245] Misti Mukh: 25 dishes
+  [18/245] Midnight Express: 12 dishes
+  [19/245] Best Home Kitchen: 20 dishes
+  [20/245] Crisp - Chef's Table Dhanmondi: 30 dishes
+  [21/245] Street Adda: 10 dishes
+  [22/245] Biriyani House: no menu data
+  [23/245] Bella Italia - Dhanmondi: 81 dishes
+  [24/245] Izakaya - Dhanmondi: 76 dishes
+  [25/245] Puro Pastry & Bakery -Satmasjid Road: 71 dishes
+  [26/245] Shumi's Hot Cake - Shatmosjid: 27 dishes
+  [27/245] Ginza: 42 dishes
+  [28/245] Tehari Ghar- Kalabagan: 4 dishes
+  [29/245] Rosonaboson: 15 dishes
+  [30/245] Monsi Home Kitchen: 5 dishes
+  [31/245] Bhoj Shobha: 16 dishes
+  [32/245] Chunk: 61 dishes
+  [33/245] Rosonaboson: 15 dishes
+  [34/245] Oozel: 9 dishes
+  [35/245] Food Land Fast Food Corner: 39 dishes
+  [36/245] Monsi Home Kitchen: 5 dishes
+  [37/245] Broken Hill Restaurant: 26 dishes
+  [38/245] Khabar Dabar Express: 1 dishes
+  [39/245] Ghorer Khabar: 12 dishes
+  [40/245] Tehari Ghor Orchid - Sukrabad: 5 dishes
+  [41/245] The Juice & Bite Hub: 51 dishes
+  [42/245] Mithai- Jigatola: 56 dishes
+  [43/245] Moja: 2 dishes
+  [44/245] Snackerz - Dhanmondi: 14 dishes
+  [45/245] Burger xpress - Dhanmondi: 22 dishes
+  [46/245] Boom Boom Burger: 26 dishes
+  [47/245] Bunny Bites: 24 dishes
+  [48/245] Ghorer Hashel: 23 dishes
+  [49/245] Bengali Flavour: 45 dishes
+  [50/245] Smashed Burgers - Dhanmondi: 55 dishes
+  [51/245] Al Amar Lebanese Cuisine - Dhanmondi: 64 dishes
+  [52/245] KOI Thé Dhanmondi: 38 dishes
+  [53/245] 4M Kitchen: 2 dishes
+  [54/245] Bangla Hotel and Restaurant 2: 12 dishes
+  [55/245] Cafe Vintage: 35 dishes
+  [56/245] The Birdman Chikin: 7 dishes
+  [57/245] Pizza On Fire: 11 dishes
+  [58/245] Wrapp'd BD: no menu data
+  [59/245] Banglar Mishti - Dhanmondi: 11 dishes
+  [60/245] Bangalian Shad: 83 dishes
+  [61/245] Hash Coffees & Intercontinental: 138 dishes
+  [62/245] Cafe Campfire: 65 dishes
+  [63/245] Desi Delight: 5 dishes
+  [64/245] Grameen Taste: 2 dishes
+  [65/245] Domino's Dhanmondi-Late Night: 87 dishes
+  [66/245] Authentic Catering: 10 dishes
+  [67/245] Tabaq Coffee - Dhanmondi: 69 dishes
+  [68/245] Delifrance - Dhanmondi: 184 dishes
+  [69/245] Chatime - Dhanmondi: 74 dishes
+  [70/245] AppSweet: 1 dishes
+  [71/245] Cafe Bleu - Panthapath: 77 dishes
+  [72/245] Wellness Cafe - Dhanmondi: 37 dishes
+  [73/245] The Nawabi Zone: 11 dishes
+  [74/245] Cheezy Craft: 19 dishes
+  [75/245] Cafe Sao Paulo- Dhanmondi: 102 dishes
+  [76/245] Chameli's Kitchen: 23 dishes
+  [77/245] Tha Bangali Kitchen: 32 dishes
+  [78/245] Ghorer Ranna: 23 dishes
+  [79/245] Cravings Delight: 11 dishes
+  [80/245] Sizzling Yard By Tdic: 101 dishes
+  [81/245] Cat's Special: 6 dishes
+  [82/245] Quick Bite: 54 dishes
+  [83/245] Ahmed Bakers: 27 dishes
+  [84/245] Blink- Dhanmondi: 11 dishes
+  [85/245] Spicy Table: 191 dishes
+  [86/245] Alpha Kitchen: 5 dishes
+  [87/245] Uncle Bobo's - Dhanmondi: 8 dishes
+  [88/245] Momo’s Kitchen House - Dhanmondi: 5 dishes
+  [89/245] Pizzafy - Dhanmondi: 17 dishes
+  [90/245] Zaiqa Darbar: 9 dishes
+  [91/245] The Dip Fry Dhanmondi: 1 dishes
+  [92/245] Shantir Shad: 132 dishes
+  [93/245] Khabar Ghor: 16 dishes
+  [94/245] Spice Avenue: 17 dishes
+  [95/245] Fry King: 28 dishes
+  [96/245] Omore's Cake Lab: 4 dishes
+  [97/245] Aklima's Kitchen: 11 dishes
+  [98/245] Cravory: 18 dishes
+  [99/245] Cravix Kitchen: 22 dishes
+  [100/245] Let's Vibe (Dhanmondi) - pandago: no menu data
+  [101/245] Hazi Biriyani House - Green Road: 13 dishes
+  [102/245] Creamy Cake: 4 dishes
+  [103/245] Shila's Kitchen: 11 dishes
+  [104/245] Haji Biriyani - Green Road: 28 dishes
+  [105/245] SnackLoop0.2: 14 dishes
+  [106/245] Kazi's Snackss: 9 dishes
+  [107/245] Night Cravers: 6 dishes
+  [108/245] Midnight Express: 12 dishes
+  [109/245] TASTE HEAVEN: 34 dishes
+  [110/245] CP Five Star - Panthapath: 14 dishes
+  [111/245] SoulBowl Kitchen: 21 dishes
+  [112/245] Khuda Lagche: 23 dishes
+  [113/245] Sweet Kitchen: no menu data
+  [114/245] Foody: 26 dishes
+  [115/245] Boishakhi Ranna Ghor: 61 dishes
+  [116/245] Deshi Food Shop (Lalmatia) - pandago: no menu data
+  [117/245] Hira’s Kitchen: 34 dishes
+  [118/245] CP five Star - Green Garden Food Court: 15 dishes
+  [119/245] Jhal kutir: 56 dishes
+  [120/245] Bom Boloni: 31 dishes
+  [121/245] Have A Relax: 12 dishes
+  [122/245] Green Garden Fast Food: 29 dishes
+  [123/245] Bread Basket - Bakery & Fast Food - Kathal Bagan: 22 dishes
+  [124/245] Food Mart: 9 dishes
+  [125/245] Sumi's kitchen: 5 dishes
+  [126/245] Dream Bites: 10 dishes
+  [127/245] Shader Bangla Khabar: 32 dishes
+  [128/245] PizzaRonni: 11 dishes
+  [129/245] Minhazuls Kitchen: 1 dishes
+  [130/245] Creative Home Kitchen: 244 dishes
+  [131/245] Creative Biriyani House: 47 dishes
+  [132/245] Ashik Burger & Pizza: 22 dishes
+  [133/245] Home Kitchen: 151 dishes
+  [134/245] Snacks Snooks: 92 dishes
+  [135/245] Misti Mukh: 25 dishes
+  [136/245] Best Home Kitchen: 20 dishes
+  [137/245] Restaurant Swiss: 28 dishes
+  [138/245] LUVAZUN: 28 dishes
+  [139/245] The Roadside Eatery: 24 dishes
+  [140/245] Jhura Mangsho & More: 5 dishes
+  [141/245] WING: 5 dishes
+  [142/245] Marufa's Kitchen: 13 dishes
+  [143/245] Roast Pulao & Bhorta Bhat: no menu data
+  [144/245] LUIGI S: 12 dishes
+  [145/245] Khorak: 26 dishes
+  [146/245] ShaRuma's Kitchen: 7 dishes
+  [147/245] Doi Plus: no menu data
+  [148/245] Jannat's Kitchen: 35 dishes
+  [149/245] Kacchi Bari: 3 dishes
+  [150/245] Kitchen Foodmart: 9 dishes
+  [151/245] Apyayon Kitchen: 16 dishes
+  [152/245] The Rocks Burger Co.: 23 dishes
+  [153/245] Best Kitchen: 25 dishes
+  [154/245] Momo Mama Townhall: 7 dishes
+  [155/245] Singapore Juice and Coffee Bar: 106 dishes
+  [156/245] Huzaifa's Kitchen: 11 dishes
+  [157/245] Shader Dairy by Yasmin: 32 dishes
+  [158/245] Pimente: 21 dishes
+  [159/245] Azmira's Kitchen: 23 dishes
+  [160/245] MR SHAWARMA: 46 dishes
+  [161/245] Zinia Thai Chinese Restaurant: 78 dishes
+  [162/245] Hotel Green & Restaurant: 1 dishes
+  [163/245] Ruchi Ghor: 7 dishes
+  [164/245] Silent Zone: 11 dishes
+  [165/245] Da Mellow: 24 dishes
+  [166/245] Bhojonshala Restaurant & Biryani House: 25 dishes
+  [167/245] Fiery & Spicy: 14 dishes
+  [168/245] Sampan Food: 9 dishes
+  [169/245] Shake It First: 61 dishes
+  [170/245] KSV: 12 dishes
+  [171/245] Tasty Treat - New Elephant Road - Katabon: 43 dishes
+  [172/245] Mama Hotel & Restaurant: 11 dishes
+  [173/245] PIZZA LAB: 11 dishes
+  [174/245] Midnight Pizza: 13 dishes
+  [175/245] Meat Hub: 12 dishes
+  [176/245] Sumaiya Chotpoti Fuchka: 23 dishes
+  [177/245] Momo Panda: 14 dishes
+  [178/245] Chacha Biryani House: 6 dishes
+  [179/245] Sea Food Station: 25 dishes
+  [180/245] Blossom Cafe & Restaurant: 16 dishes
+  [181/245] Bakers Plus - Town Hall: 31 dishes
+  [182/245] Daily Deshi: 33 dishes
+  [183/245] Home Kitchen: no menu data
+  [184/245] Ruma's Kitchen: 48 dishes
+  [185/245] Ehan's Dine: 13 dishes
+  [186/245] Food Bar: 15 dishes
+  [187/245] Adorsho Bangla Hotel: 6 dishes
+  [188/245] Matbakh: 10 dishes
+  [189/245] Juicy Juice Bar: 24 dishes
+  [190/245] Muslim Biriyani: 8 dishes
+  [191/245] MOMO HOUSE NOORJAHAN ROAD: 12 dishes
+  [192/245] Roadside Kitchen Dhanmondi: 4 dishes
+  [193/245] Rondon Ghor: 10 dishes
+  [194/245] Ghorer Korai: 60 dishes
+  [195/245] 8 Number Dokan - Mohammadpur: no menu data
+  [196/245] Pritom Burger - Mohammadpur: 6 dishes
+  [197/245] Big Q - Mohammadpur: 11 dishes
+  [198/245] Ghorer Shad: 19 dishes
+  [199/245] Home Made khabar: 11 dishes
+  [200/245] The Daily Drip: 41 dishes
+  [201/245] Romoni's Kitchen: 20 dishes
+  [202/245] Kacchi Sakib: 1 dishes
+  [203/245] Lina's Kitchen Diary: 45 dishes
+  [204/245] Goroa Shaad by Fatiha: 15 dishes
+  [205/245] The Food Club: no menu data
+  [206/245] Coffee House: 18 dishes
+  [207/245] Fish n Fry - F F Mart: 11 dishes
+  [208/245] Kitchen Story: 15 dishes
+  [209/245] Tahamina's Kitchen: 12 dishes
+  [210/245] ALJIL: 9 dishes
+  [211/245] Khana Pina: 27 dishes
+  [212/245] Shaila's Kitchen: 15 dishes
+  [213/245] Steam Sisters Kitchen BD: 5 dishes
+  [214/245] Myth: 4 dishes
+  [215/245] Mayer Hater Halim: 11 dishes
+  [216/245] Bangla Bites: 19 dishes
+  [217/245] Hot Plate: 15 dishes
+  [218/245] Rater Kabab: 10 dishes
+  [219/245] Momo Burger: 8 dishes
+  [220/245] Prithibir Rannaghar: 4 dishes
+  [221/245] London House: 22 dishes
+  [222/245] Rosona: 15 dishes
+  [223/245] Mughal Shahi Biryani: 11 dishes
+  [224/245] GolpoBuzz: 4 dishes
+  [225/245] Khaidaai: 12 dishes
+  [226/245] Dostorkhan-e-Pakistani Karahi: 18 dishes
+  [227/245] City Garden Chinese - Shyamoli: 67 dishes
+  [228/245] Bowl It Up: 8 dishes
+  [229/245] Pizza Burg - Mohammadpur: 52 dishes
+  [230/245] Green & Grains: 6 dishes
+  [231/245] Mousumi Homemade Rannagho: 24 dishes
+  [232/245] Nook Kitchen: 10 dishes
+  [233/245] Bhorta Ghar: 9 dishes
+  [234/245] Deshi Food Shop (Adabor) - pandago: no menu data
+  [235/245] Noor Biryani House - Shyamoli: 2 dishes
+  [236/245] Chittagong Xpress: 38 dishes
+  [237/245] Shayaan's Kitchen: 30 dishes
+  [238/245] Live Burger & Juice Bar: 11 dishes
+  [239/245] Frosty Treats: 10 dishes
+  [240/245] Mayer Hater Ranna: 3 dishes
+  [241/245] Chocojello: 7 dishes
+  [242/245] Ghorey Delivery: 35 dishes
+  [243/245] Vortha Ghor: 17 dishes
+  [244/245] An Food & Freshness: 12 dishes
+  [245/245] Fry & Steam: 20 dishes
+
+  Dhanmondi summary: 245 restaurants, 5964 dishes (245 ok, 0 failed)
+
+--- Gulshan (lat=23.7925, lng=90.4078) ---
+  [list] Fetching offset=0...
+  [list] Got 40 restaurants (40/268 total)
+  [list] Fetching offset=40...
+  [list] Got 40 restaurants (80/268 total)
+  [list] Fetching offset=80...
+  [list] Got 40 restaurants (120/268 total)
+  [list] Fetching offset=120...
+  [list] Got 40 restaurants (160/268 total)
+  [list] Fetching offset=160...
+  [list] Got 40 restaurants (200/268 total)
+  [list] Fetching offset=200...
+  [list] Got 40 restaurants (240/268 total)
+  [list] Fetching offset=240...
+  [list] Got 28 restaurants (268/268 total)
+
+  [detail] Fetching menus for 268 restaurants...
+  [1/268] Samurai Sushi Kitchen - Baridhara: 56 dishes
+  [2/268] Doner's: 9 dishes
+  [3/268] Royal Treat - By Ascott Palace: 75 dishes
+  [4/268] Blink: 12 dishes
+  [5/268] Shawarma N Katiroll: 11 dishes
+  [6/268] Doner Korner: 2 dishes
+  [7/268] Dragon Eye: 89 dishes
+  [8/268] The Cinnamon Tree Restaurant: 64 dishes
+  [9/268] Royal Korean Cuisine: 74 dishes
+  [10/268] Kona Cafe: 62 dishes
+  [11/268] Burger Xpress - Banani: 70 dishes
+  [12/268] Cheez - Banani: 47 dishes
+  [13/268] Uncle Bobo's: 13 dishes
+  [14/268] DIET - Did I Eat That: 15 dishes
+  [15/268] Rater Kabab: 39 dishes
+  [16/268] Special Bhai Bhai Biriyani House: 13 dishes
+  [17/268] Waffle Up: 12 dishes
+  [18/268] Minis Dutch Pancakes: 22 dishes
+  [19/268] BACHELOR'S EXPRESS: 40 dishes
+  [20/268] Cranky’s: 38 dishes
+  [21/268] Doner Lounge: 20 dishes
+  [22/268] Chunk - Banani: 30 dishes
+  [23/268] Rice & Beyond: 8 dishes
+  [24/268] Crust & Cheese: 22 dishes
+  [25/268] Tehari Box: 23 dishes
+  [26/268] HANDI TEHARI: 8 dishes
+  [27/268] Thai Bistro - Gulshan 2: 70 dishes
+  [28/268] Kitchen Stories: 23 dishes
+  [29/268] Matubber Briyani: no menu data
+  [30/268] AM 2 PM: 56 dishes
+  [31/268] Puro Pastry & Bakery Banani-WBC: 49 dishes
+  [32/268] Arabika Coffee – Gulshan Anabil Tower: 94 dishes
+  [33/268] Cocojoy: 31 dishes
+  [34/268] Shumi's Hot Cake - Banani: 50 dishes
+  [35/268] ParkView: 45 dishes
+  [36/268] Indulge - Banani: 64 dishes
+  [37/268] Kona Cafe: 62 dishes
+  [38/268] Buns & butchers: 10 dishes
+  [39/268] Oven: 20 dishes
+  [40/268] Chokka: 13 dishes
+  [41/268] Ninja potato: 12 dishes
+  [42/268] Pizzolo Caffe: 13 dishes
+  [43/268] Bangkok Bites: 39 dishes
+  [44/268] The Bakehouse: 46 dishes
+  [45/268] BACHELOR'S EXPRESS: 40 dishes
+  [46/268] The Bakehouse - Cake & Pastry: 1 dishes
+  [47/268] Welkin Pastry: 24 dishes
+  [48/268] Doner Lounge: 20 dishes
+  [49/268] Suruchi Khabar Ghor - Gulshan 2: no menu data
+  [50/268] Cake Storys - Banani: 42 dishes
+  [51/268] Turkey Bliss: 40 dishes
+  [52/268] Fuchka Mama: 8 dishes
+  [53/268] Pizza Town Gulshan: 9 dishes
+  [54/268] Fuchka Club - Gulshan 2: 3 dishes
+  [55/268] Naval Point - Gulshan: 5 dishes
+  [56/268] Istanbul Restaurant Dhaka: 60 dishes
+  [57/268] Holey Bakery: 141 dishes
+  [58/268] Aroth Kitchen: 15 dishes
+  [59/268] Healthy And Tasty Food: 17 dishes
+  [60/268] Savoury: 25 dishes
+  [61/268] SammBakes: 6 dishes
+  [62/268] The Club Lounge Restaurant: FAIL
+  [63/268] Dora's Kitchen: FAIL
+  [64/268] Chatni Restaurant: FAIL
+  [65/268] Relish and Savour: FAIL
+  [66/268] Choroi Bhati: FAIL
+  [67/268] New King Kitchen: FAIL
+  [68/268] Mim's Cloud Kitchen: FAIL
+  [69/268] Utshob - Chef's Table Gulshan 2: FAIL
+  [70/268] Greens & Seeds -  Chef's Table Gulshan 2: FAIL
+  [71/268] Alfredough - Chef's Table Gulshan 2: FAIL
+  [72/268] Utshob Sweets - Gulshan 2: FAIL
+  [73/268] Izakaya - Gulshan: FAIL
+  [74/268] Halim & Pitha Ghor: FAIL
+  [75/268] House of Niribiri: FAIL
+  [76/268] Foodie Bhai: FAIL
+  [77/268] Pani Puri - Gulshan 2: FAIL
+  [78/268] Fresh Super Mart Cafe - Gulshan: FAIL
+  [79/268] H&N Juice Shack: FAIL
+  [80/268] Habanero: FAIL
+  [81/268] Trippy - Banani: FAIL
+  [82/268] Cranky’s: FAIL
+  [83/268] Fish N Grill: FAIL
+  [84/268] Delifrance - Casablanca: FAIL
+  [85/268] Bashonti: FAIL
+  [86/268] Cafe Sao Paulo - Gulshan: FAIL
+  [87/268] ZAFRA BY GLITZ: FAIL
+  [88/268] Midnight Baker: FAIL
+  [89/268] Da One Cafe: FAIL
+  [90/268] Halda Valley Tea Lounge: FAIL
+  [91/268] Nastaai: FAIL
+  [92/268] Macher Jhol: FAIL
+  [93/268] Bella Italia - Gulshan: FAIL
+  [94/268] BhojBangla: FAIL
+  [95/268] Al Amar Lebanese Cuisine - Gulshan: FAIL
+  [96/268] Snack Society: FAIL
+  [97/268] Deshi Taste House: FAIL
+  [98/268] Urban Blend: FAIL
+  [99/268] Pizza & Dumpling: FAIL
+  [100/268] HANDI TEHARI: FAIL
+  [101/268] Sassy Slice by 6ix9: FAIL
+  [102/268] Rice Lover: FAIL
+  [103/268] Juice and More: FAIL
+  [104/268] Hot n Fast by 6ix9: FAIL
+  [105/268] Dumpling Express by 6ix9: FAIL
+  [106/268] Rice & More: FAIL
+  [107/268] Fatz: FAIL
+  [108/268] SpiceL: FAIL
+  [109/268] Chunk - Banani: FAIL
+  [110/268] Xtra Mayo - Gulshan: FAIL
+  [111/268] Grills & Grains Pizzeria: FAIL
+  [112/268] Rice & Beyond: FAIL
+  [113/268] Doner Korner: FAIL
+  [114/268] Brewnique - Badda: FAIL
+  [115/268] Aandaaz: FAIL
+  [116/268] Frost and Flame: FAIL
+  [117/268] MP Cafe: FAIL
+  [118/268] Bene Bistro: FAIL
+  [119/268] Aunty's Momo: FAIL
+  [120/268] The Tehari Ghor - Mohakhali: FAIL
+  [121/268] Joss Momo: FAIL
+  [122/268] AM 2 PM: FAIL
+  [123/268] The Burgizza: FAIL
+  [124/268] Rannaghor: FAIL
+  [125/268] The Cook's Corner: FAIL
+  [126/268] Takeout Express: FAIL
+  [127/268] Bhorta Bari - Gulshan: FAIL
+  [128/268] East Bengal Coffee Roasters - Gulshan 2: FAIL
+  [129/268] Test litaz Mama: FAIL
+  [130/268] Peyari Tehari - Gulshan 1: FAIL
+  [131/268] Queen Biryani: FAIL
+  [132/268] HIGH ON CHA: FAIL
+  [133/268] Stacked & Doner: FAIL
+  [134/268] DIET - Did I Eat That: FAIL
+  [135/268] Food Platter: FAIL
+  [136/268] Waffle Bro's: FAIL
+  [137/268] Thakumar Rannaghor: FAIL
+  [138/268] Suhaiba's Home Kitchen: FAIL
+  [139/268] Banglar Mishti - Gulshan: FAIL
+  [140/268] Lahab: FAIL
+  [141/268] Chabazi - Gulshan: FAIL
+  [142/268] Rater Kabab: FAIL
+  [143/268] Thai Express: FAIL
+  [144/268] My Home kitchen: FAIL
+  [145/268] Ghorer Khabar: FAIL
+  [146/268] Thai Town: FAIL
+  [147/268] King of Korea: FAIL
+  [148/268] Sky Vista Lounge: FAIL
+  [149/268] BAR-B-Q TONITE (SINCE - 2000): FAIL
+  [150/268] Nazira Bazar Reloaded - Gulshan: FAIL
+  [151/268] Konami At Home: FAIL
+  [152/268] Crust & Cheese: FAIL
+  [153/268] Zenith Bites: FAIL
+  [154/268] Dhaka - We Roll: FAIL
+  [155/268] Turn Tables: FAIL
+  [156/268] Beijing Dhaka & London: FAIL
+  [157/268] Seyam Biryani House - Mohakhali: FAIL
+  [158/268] Thai Momo: FAIL
+  [159/268] Sushi Express Dhaka: FAIL
+  [160/268] German Deli: FAIL
+  [161/268] Purnima Restaurant - Gulshan - 1: FAIL
+  [162/268] Pizza Milano: FAIL
+  [163/268] Pankha: FAIL
+  [164/268] Brew-tea-ful: FAIL
+  [165/268] Chattgaiya Cuisine: FAIL
+  [166/268] Spicy Nation: FAIL
+  [167/268] 2BROS CAFE: FAIL
+  [168/268] Samurai Sushi Kitchen - Baridhara: FAIL
+  [169/268] Oshisushis: FAIL
+  [170/268] Dragon Eye: FAIL
+  [171/268] Sushi House: FAIL
+  [172/268] Royal Korean Cuisine: FAIL
+  [173/268] Matubber Briyani: FAIL
+  [174/268] Royal Treat - By Ascott Palace: FAIL
+  [175/268] Special Bhai Bhai Biriyani House: FAIL
+  [176/268] Tiffin Time: FAIL
+  [177/268] Maa Er Hath Er Ranna: FAIL
+  [178/268] Biriyanir Boithok: FAIL
+  [179/268] Mitsuha's Kitchen: FAIL
+  [180/268] Cp Five Star - Happy Food Corner - Shahjadpur: FAIL
+  [181/268] Jinnat Kitchen: FAIL
+  [182/268] Mithai- Baridhara: FAIL
+  [183/268] Craving Time: FAIL
+  [184/268] Twist & Taste: FAIL
+  [185/268] Tanima's Food And Products: FAIL
+  [186/268] Ghour Biryani: FAIL
+  [187/268] Chicken King - Badda: FAIL
+  [188/268] Sara's Kitchen: FAIL
+  [189/268] Smart Food: FAIL
+  [190/268] Baked by Sadiah: FAIL
+  [191/268] Ideal Sweets & Bakery- Gudaraghat: FAIL
+  [192/268] Lucky Kitchen: FAIL
+  [193/268] ADDA&CHILL: FAIL
+  [194/268] Tokyodango - Gulshan 1: FAIL
+  [195/268] Tabaq Coffee DOHS Baridhara: FAIL
+  [196/268] Marina Cafe & Restaurant: FAIL
+  [197/268] Curry Kraft: FAIL
+  [198/268] Route 66 - Chef's Table Gulshan 1: FAIL
+  [199/268] Dreamy Creamy: FAIL
+  [200/268] Kebabs N Curries - Chef's Table Gulshan 1: FAIL
+  [201/268] So Juicy - Chef's Table Gulshan 1: FAIL
+  [202/268] Shaahi Kitchen: FAIL
+  [203/268] Taste Of Village: FAIL
+  [204/268] Snackin: FAIL
+  [205/268] CITYBITE  CLOUD KITCHEN: FAIL
+  [206/268] Al Amin Hotel & Restaurant: FAIL
+  [207/268] Lake Lover - Badda: FAIL
+  [208/268] Flavour King: FAIL
+  [209/268] Spice Box: FAIL
+  [210/268] King's Kacchi: FAIL
+  [211/268] Friends Food and Juice Corner: FAIL
+  [212/268] DailyCaree: FAIL
+  [213/268] Sporsho Cafe & Restaurant: FAIL
+  [214/268] Fuchkawala: FAIL
+  [215/268] Food Palace - Gulshan: FAIL
+  [216/268] Chicken Expert -Gulshan: FAIL
+  [217/268] Sadik's Kitchen: FAIL
+  [218/268] Usha's Kitchen: FAIL
+  [219/268] Turkish Donerzzz: FAIL
+  [220/268] Mila's Kitchen: FAIL
+  [221/268] Golden Spoon: FAIL
+  [222/268] Mooka Coffee: FAIL
+  [223/268] Kitchen Stories: FAIL
+  [224/268] Burritoz: FAIL
+  [225/268] The Cinnamon Tree Restaurant: FAIL
+  [226/268] PolaoWala: FAIL
+  [227/268] Royal Bangla Leaf - Gulshan: FAIL
+  [228/268] Khichuri Magic - Gulshan: FAIL
+  [229/268] Urban leaf- Gulshan: FAIL
+  [230/268] VVIP Jhalmuri - Gulshan: FAIL
+  [231/268] Just ilish: FAIL
+  [232/268] Tehari Nation - Gulshan: FAIL
+  [233/268] Aaznabiz - Badda: FAIL
+  [234/268] Bharta Click & More: FAIL
+  [235/268] Bhorta class & more: FAIL
+  [236/268] Salma Bhorta House: FAIL
+  [237/268] Hazrat Shahjalal Chotpoti And Restaurant: FAIL
+  [238/268] LFC - Lokman Chotpoti And Fuchka: FAIL
+  [239/268] Rumaisa's Kitchen: FAIL
+  [240/268] Fry Up: FAIL
+  [241/268] Tokyo Food: FAIL
+  [242/268] Dadir Choya Rannaghor: FAIL
+  [243/268] Healthy & Fresh Kitchen: FAIL
+  [244/268] Furryghor Cafe: FAIL
+  [245/268] The Meatbox: FAIL
+  [246/268] GreenBean - Tejgaon: FAIL
+  [247/268] Gulshan Biriyani House: FAIL
+  [248/268] Meatbox & Burger - Gulshan: FAIL
+  [249/268] Manzile: FAIL
+  [250/268] Khichuri-Wali: FAIL
+  [251/268] Cha Bazi: FAIL
+  [252/268] Hakka Gulshan: FAIL
+  [253/268] Tehari Box: FAIL
+  [254/268] Being Pizza: FAIL
+  [255/268] Impetus Lounge: FAIL
+  [256/268] Rice Republic - Gulshan (Special offer available): FAIL
+  [257/268] Maha's kitchen: FAIL
+  [258/268] Fravings: FAIL
+  [259/268] Yumm Kitchen: FAIL
+  [260/268] Cheesy Dreams: FAIL
+  [261/268] Tiffin Hall: FAIL
+  [262/268] Smoked: FAIL
+  [263/268] Cloudine Kitchen: FAIL
+  [264/268] TaAnas Culinary: FAIL
+  [265/268] Rizq Catering: FAIL
+  [266/268] Copper Cravings: FAIL
+  [267/268] Azkaban: FAIL
+  [268/268] Ruti Ghor: FAIL
+
+  Gulshan summary: 268 restaurants, 1905 dishes (61 ok, 207 failed)
+
+--- Banani (lat=23.7936, lng=90.4023) ---
+  [list] Fetching offset=0...
+  [list] Got 40 restaurants (40/267 total)
+  [list] Fetching offset=40...
+  [list] Got 40 restaurants (80/267 total)
+  [list] Fetching offset=80...
+  [list] Got 40 restaurants (120/267 total)
+  [list] Fetching offset=120...
+  [list] Got 40 restaurants (160/267 total)
+  [list] Fetching offset=160...
+  [list] Got 40 restaurants (200/267 total)
+  [list] Fetching offset=200...
+  [list] Got 40 restaurants (240/267 total)
+  [list] Fetching offset=240...
+  [list] Got 27 restaurants (267/267 total)
+
+  [detail] Fetching menus for 267 restaurants...
+  [1/267] Samurai Sushi Kitchen - Baridhara: FAIL
+  [2/267] Doner's: FAIL
+  [3/267] Blink: FAIL
+  [4/267] Doner Korner: FAIL
+  [5/267] Royal Treat - By Ascott Palace: FAIL
+  [6/267] Royal Korean Cuisine: FAIL
+  [7/267] The Cinnamon Tree Restaurant: FAIL
+  [8/267] Shawarma N Katiroll: FAIL
+  [9/267] Oshisushis: FAIL
+  [10/267] Buns & butchers: FAIL
+  [11/267] Cheez - Banani: FAIL
+  [12/267] Uncle Bobo's: FAIL
+  [13/267] DIET - Did I Eat That: FAIL
+  [14/267] Rater Kabab: FAIL
+  [15/267] Special Bhai Bhai Biriyani House: FAIL
+  [16/267] Minis Dutch Pancakes: FAIL
+  [17/267] Waffle Up: FAIL
+  [18/267] Chunk - Banani: FAIL
+  [19/267] BACHELOR'S EXPRESS: FAIL
+  [20/267] Cranky’s: FAIL
+  [21/267] Kona Cafe: FAIL
+  [22/267] Doner Lounge: FAIL
+  [23/267] Crust & Cheese: FAIL
+  [24/267] Ninja potato: FAIL
+  [25/267] HANDI TEHARI: FAIL
+  [26/267] Tehari Box: FAIL
+  [27/267] Rice & Beyond: FAIL
+  [28/267] Thai Bistro - Gulshan 2: FAIL
+  [29/267] AM 2 PM: FAIL
+  [30/267] Thai Bistro - Banani: FAIL
+  [31/267] Indian Kitchen -Banani: FAIL
+  [32/267] Thai Bistro - Gulshan 2: FAIL
+  [33/267] Cafe Mario's: FAIL
+  [34/267] Hungry Pizza Lovers - Banani: FAIL
+  [35/267] Hungry Pizza Lovers: FAIL
+  [36/267] Ledor  Banani: FAIL
+  [37/267] Dora's Kitchen: FAIL
+  [38/267] Chino Bakery & Pastry: FAIL
+  [39/267] Shawarma N Katiroll: FAIL
+  [40/267] Waffle Up: FAIL
+  [41/267] Doner's: FAIL
+  [42/267] Karaachi Dastarkhwan: FAIL
+  [43/267] Fruitsicles - Banani: FAIL
+  [44/267] Jatra Biroti: FAIL
+  [45/267] Habanero: FAIL
+  [46/267] Trippy - Banani: FAIL
+  [47/267] Cranky’s: FAIL
+  [48/267] Cilantro Pizzeria: FAIL
+  [49/267] Azuki: FAIL
+  [50/267] The Club Lounge Restaurant: FAIL
+  [51/267] Cheez - Banani: FAIL
+  [52/267] SammBakes: FAIL
+  [53/267] Relish and Savour: FAIL
+  [54/267] Puro Pastry & Bakery Banani-WBC: FAIL
+  [55/267] Arabika Coffee – Gulshan Anabil Tower: FAIL
+  [56/267] Macher Jhol: FAIL
+  [57/267] Nastaai: FAIL
+  [58/267] Pizza & Dumpling: FAIL
+  [59/267] HANDI TEHARI: FAIL
+  [60/267] Juice and More: FAIL
+  [61/267] Sassy Slice by 6ix9: FAIL
+  [62/267] Rice Lover: FAIL
+  [63/267] Hot n Fast by 6ix9: FAIL
+  [64/267] Dumpling Express by 6ix9: FAIL
+  [65/267] Chunk - Banani: FAIL
+  [66/267] Kona Cafe: FAIL
+  [67/267] Pizzolo Caffe: FAIL
+  [68/267] BACHELOR'S EXPRESS: FAIL
+  [69/267] Doner Lounge: FAIL
+  [70/267] Mim's Cloud Kitchen: FAIL
+  [71/267] Fuchka Mama: FAIL
+  [72/267] Pizza Town Gulshan: FAIL
+  [73/267] Suruchi Khabar Ghor - Gulshan 2: FAIL
+  [74/267] Istanbul Restaurant Dhaka: FAIL
+  [75/267] Izakaya - Gulshan: FAIL
+  [76/267] Holey Bakery: FAIL
+  [77/267] Fish N Grill: FAIL
+  [78/267] MP Cafe: FAIL
+  [79/267] Naval Point - Gulshan: FAIL
+  [80/267] Halim & Pitha Ghor: FAIL
+  [81/267] Aroth Kitchen: FAIL
+  [82/267] Healthy And Tasty Food: FAIL
+  [83/267] Cafe Sao Paulo - Gulshan: FAIL
+  [84/267] Fuchka Club - Gulshan 2: FAIL
+  [85/267] Greens & Seeds -  Chef's Table Gulshan 2: FAIL
+  [86/267] Alfredough - Chef's Table Gulshan 2: FAIL
+  [87/267] Utshob - Chef's Table Gulshan 2: FAIL
+  [88/267] Utshob Sweets - Gulshan 2: FAIL
+  [89/267] New King Kitchen: FAIL
+  [90/267] Choroi Bhati: FAIL
+  [91/267] Frost and Flame: FAIL
+  [92/267] BhojBangla: FAIL
+  [93/267] House of Niribiri: FAIL
+  [94/267] H&N Juice Shack: FAIL
+  [95/267] Foodie Bhai: FAIL
+  [96/267] Pani Puri - Gulshan 2: FAIL
+  [97/267] Stacked & Doner: FAIL
+  [98/267] Seyam Biryani House - Mohakhali: FAIL
+  [99/267] The Tehari Ghor - Mohakhali: FAIL
+  [100/267] Bashonti: FAIL
+  [101/267] Delifrance - Casablanca: FAIL
+  [102/267] ZAFRA BY GLITZ: FAIL
+  [103/267] Midnight Baker: FAIL
+  [104/267] AM 2 PM: FAIL
+  [105/267] The Burgizza: FAIL
+  [106/267] Rannaghor: FAIL
+  [107/267] The Cook's Corner: FAIL
+  [108/267] Ghorer Khabar: FAIL
+  [109/267] Takeout Express: FAIL
+  [110/267] My Home kitchen: FAIL
+  [111/267] Bhorta Bari - Gulshan: FAIL
+  [112/267] East Bengal Coffee Roasters - Gulshan 2: FAIL
+  [113/267] Da One Cafe: FAIL
+  [114/267] Halda Valley Tea Lounge: FAIL
+  [115/267] Bella Italia - Gulshan: FAIL
+  [116/267] Al Amar Lebanese Cuisine - Gulshan: FAIL
+  [117/267] Brewnique - Badda: FAIL
+  [118/267] Snack Society: FAIL
+  [119/267] Deshi Taste House: FAIL
+  [120/267] Urban Blend: FAIL
+  [121/267] Aunty's Momo: FAIL
+  [122/267] Lahab: FAIL
+  [123/267] Thakumar Rannaghor: FAIL
+  [124/267] Suhaiba's Home Kitchen: FAIL
+  [125/267] Aandaaz: FAIL
+  [126/267] Joss Momo: FAIL
+  [127/267] Fatz: FAIL
+  [128/267] SpiceL: FAIL
+  [129/267] Rice & Beyond: FAIL
+  [130/267] Xtra Mayo - Gulshan: FAIL
+  [131/267] Grills & Grains Pizzeria: FAIL
+  [132/267] Doner Korner: FAIL
+  [133/267] Tiffin Time: FAIL
+  [134/267] Sara's Kitchen: FAIL
+  [135/267] Smart Food: FAIL
+  [136/267] Baked by Sadiah: FAIL
+  [137/267] Lucky Kitchen: FAIL
+  [138/267] Bene Bistro: FAIL
+  [139/267] Queen Biryani: FAIL
+  [140/267] Peyari Tehari - Gulshan 1: FAIL
+  [141/267] Test litaz Mama: FAIL
+  [142/267] Rater Kabab: FAIL
+  [143/267] Chabazi - Gulshan: FAIL
+  [144/267] Banglar Mishti - Gulshan: FAIL
+  [145/267] HIGH ON CHA: FAIL
+  [146/267] Brew-tea-ful: FAIL
+  [147/267] BAR-B-Q TONITE (SINCE - 2000): FAIL
+  [148/267] Nazira Bazar Reloaded - Gulshan: FAIL
+  [149/267] Sky Vista Lounge: FAIL
+  [150/267] DIET - Did I Eat That: FAIL
+  [151/267] Konami At Home: FAIL
+  [152/267] Food Platter: FAIL
+  [153/267] Tabaq Coffee DOHS Baridhara: FAIL
+  [154/267] Purnima Restaurant - Gulshan - 1: FAIL
+  [155/267] Waffle Bro's: FAIL
+  [156/267] Fuchkawala: FAIL
+  [157/267] German Deli: FAIL
+  [158/267] Dreamy Creamy: FAIL
+  [159/267] Thai Express: FAIL
+  [160/267] Thai Town: FAIL
+  [161/267] King of Korea: FAIL
+  [162/267] Royal Treat - By Ascott Palace: FAIL
+  [163/267] CITYBITE  CLOUD KITCHEN: FAIL
+  [164/267] Thai Momo: FAIL
+  [165/267] Sushi Express Dhaka: FAIL
+  [166/267] Crust & Cheese: FAIL
+  [167/267] Spicy Nation: FAIL
+  [168/267] Dhaka - We Roll: FAIL
+  [169/267] Turn Tables: FAIL
+  [170/267] Beijing Dhaka & London: FAIL
+  [171/267] 2BROS CAFE: FAIL
+  [172/267] CP Five Star -Tabassum Food- Kalachadpur: FAIL
+  [173/267] Zenith Bites: FAIL
+  [174/267] Taste Of Village: FAIL
+  [175/267] Pizza Milano: FAIL
+  [176/267] Pankha: FAIL
+  [177/267] Chattgaiya Cuisine: FAIL
+  [178/267] King's Kacchi: FAIL
+  [179/267] Mithai- Baridhara: FAIL
+  [180/267] Samurai Sushi Kitchen - Baridhara: FAIL
+  [181/267] Oshisushis: FAIL
+  [182/267] Oshisushis: FAIL
+  [183/267] Dragon Eye: FAIL
+  [184/267] Sushi House: FAIL
+  [185/267] Royal Korean Cuisine: FAIL
+  [186/267] Matubber Briyani: FAIL
+  [187/267] Tokyodango - Gulshan 1: FAIL
+  [188/267] Special Bhai Bhai Biriyani House: FAIL
+  [189/267] Mooka Coffee: FAIL
+  [190/267] Mila's Kitchen: FAIL
+  [191/267] Golden Spoon: FAIL
+  [192/267] Curry Kraft: FAIL
+  [193/267] Route 66 - Chef's Table Gulshan 1: FAIL
+  [194/267] Kebabs N Curries - Chef's Table Gulshan 1: FAIL
+  [195/267] Maa Er Hath Er Ranna: FAIL
+  [196/267] So Juicy - Chef's Table Gulshan 1: FAIL
+  [197/267] Sadik's Kitchen: FAIL
+  [198/267] Biriyanir Boithok: FAIL
+  [199/267] Twist & Taste: FAIL
+  [200/267] Mitsuha's Kitchen: FAIL
+  [201/267] Jinnat Kitchen: FAIL
+  [202/267] Snackin: FAIL
+  [203/267] ADDA&CHILL: FAIL
+  [204/267] Ideal Sweets & Bakery- Gudaraghat: FAIL
+  [205/267] Craving Time: FAIL
+  [206/267] Marina Cafe & Restaurant: FAIL
+  [207/267] Tanima's Food And Products: FAIL
+  [208/267] Ghour Biryani: FAIL
+  [209/267] Chicken King - Badda: FAIL
+  [210/267] Food Palace - Gulshan: FAIL
+  [211/267] Turkish Donerzzz: FAIL
+  [212/267] Shaahi Kitchen: FAIL
+  [213/267] Lake Lover - Badda: FAIL
+  [214/267] GreenBean - Tejgaon: FAIL
+  [215/267] Bharta Click & More: FAIL
+  [216/267] Bhorta class & more: FAIL
+  [217/267] Fry Up: FAIL
+  [218/267] Flavour King: FAIL
+  [219/267] Impetus Lounge: FAIL
+  [220/267] Hazrat Shahjalal Chotpoti And Restaurant: FAIL
+  [221/267] Al Amin Hotel & Restaurant: FAIL
+  [222/267] Salma Bhorta House: FAIL
+  [223/267] Spice Box: FAIL
+  [224/267] Rumaisa's Kitchen: FAIL
+  [225/267] Healthy & Fresh Kitchen: FAIL
+  [226/267] Friends Food and Juice Corner: FAIL
+  [227/267] The Cinnamon Tree Restaurant: FAIL
+  [228/267] Furryghor Cafe: FAIL
+  [229/267] Burritoz: FAIL
+  [230/267] Chicken Expert -Gulshan: FAIL
+  [231/267] Usha's Kitchen: FAIL
+  [232/267] DailyCaree: FAIL
+  [233/267] Sporsho Cafe & Restaurant: FAIL
+  [234/267] Kitchen Stories: FAIL
+  [235/267] Tiffin Hall: FAIL
+  [236/267] PolaoWala: FAIL
+  [237/267] Royal Bangla Leaf - Gulshan: FAIL
+  [238/267] Khichuri Magic - Gulshan: FAIL
+  [239/267] Urban leaf- Gulshan: FAIL
+  [240/267] Tehari Nation - Gulshan: FAIL
+  [241/267] VVIP Jhalmuri - Gulshan: FAIL
+  [242/267] Just ilish: FAIL
+  [243/267] Tokyo Food: FAIL
+  [244/267] LFC - Lokman Chotpoti And Fuchka: FAIL
+  [245/267] Smoked: FAIL
+  [246/267] Rizq Catering: FAIL
+  [247/267] Cha Bazi: FAIL
+  [248/267] Hakka Gulshan: FAIL
+  [249/267] Cheesy Dreams: FAIL
+  [250/267] Aaznabiz - Badda: FAIL
+  [251/267] TaAnas Culinary: FAIL
+  [252/267] The Meatbox: FAIL
+  [253/267] Gulshan Biriyani House: FAIL
+  [254/267] Fravings: FAIL
+  [255/267] Meatbox & Burger - Gulshan: FAIL
+  [256/267] Dadir Choya Rannaghor: FAIL
+  [257/267] Manzile: FAIL
+  [258/267] Being Pizza: FAIL
+  [259/267] Rice Republic - Gulshan (Special offer available): FAIL
+  [260/267] Yumm Kitchen: FAIL
+  [261/267] Tehari Box: FAIL
+  [262/267] Maha's kitchen: FAIL
+  [263/267] Khichuri-Wali: FAIL
+  [264/267] Cloudine Kitchen: FAIL
+  [265/267] Copper Cravings: FAIL
+  [266/267] Azkaban: FAIL
+  [267/267] Ruti Ghor: FAIL
+
+  Banani summary: 267 restaurants, 0 dishes (0 ok, 267 failed)
+
+--- Uttara (lat=23.8759, lng=90.4) ---
+  [list] Fetching offset=0...
+  [list] Got 40 restaurants (40/214 total)
+  [list] Fetching offset=40...
+  [list] Got 40 restaurants (80/214 total)
+  [list] Fetching offset=80...
+  [list] Got 40 restaurants (120/214 total)
+  [list] Fetching offset=120...
+  [list] Got 40 restaurants (160/214 total)
+  [list] Fetching offset=160...
+  [list] Got 40 restaurants (200/214 total)
+  [list] Fetching offset=200...
+  [list] Got 14 restaurants (214/214 total)
+
+  [detail] Fetching menus for 214 restaurants...
+  [1/214] Jalapenos: FAIL
+  [2/214] Care Kitchen: FAIL
+  [3/214] BiteCraft - Uttara: FAIL
+  [4/214] Food Lab: FAIL
+  [5/214] B-Baria Restaurant - Uttara: FAIL
+  [6/214] Rice Express - Uttara: FAIL
+  [7/214] Shammis Home kitchen: FAIL
+  [8/214] Moti's Kitchen: FAIL
+  [9/214] Chef Kitchen: FAIL
+  [10/214] Maa Home Delivery - Uttara: FAIL
+  [11/214] Crispy Corner: FAIL
+  [12/214] Seoul Spice Kitchen: FAIL
+  [13/214] Foodelux: FAIL
+  [14/214] Uttara Homemade Biriyani House: FAIL
+  [15/214] Khichuri Ghor 2.0: FAIL
+  [16/214] LiteBites & Juices: FAIL
+  [17/214] Lunch Villa - Uttara: FAIL
+  [18/214] AizaaLeen'S Kitchen: FAIL
+  [19/214] Red Onion - Uttara: FAIL
+  [20/214] Chicken Junction - Uttara: FAIL
+  [21/214] Next Bite: FAIL
+  [22/214] Chunkz: FAIL
+  [23/214] Uttara Home Kitchen: FAIL
+  [24/214] Mojar Bites: FAIL
+  [25/214] Royale Spice Ghor: FAIL
+  [26/214] Tarragon Restaurant- Best Western Plus Maple Leaf: FAIL
+  [27/214] Khichuri Ghar: FAIL
+  [28/214] Diamond Pizza: FAIL
+  [29/214] The Beef Lab: FAIL
+  [30/214] Hungry Hub Briyani: FAIL
+  [31/214] Henshel Bari: FAIL
+  [32/214] Organio Kitchen: FAIL
+  [33/214] Gisele's kitchen: FAIL
+  [34/214] Patenga Cafe - Uttara: FAIL
+  [35/214] Borisal Hotel: FAIL
+  [36/214] Waffle Bar: FAIL
+  [37/214] Sub Lover's - Uttara: FAIL
+  [38/214] Cake Lover's - Uttara: FAIL
+  [39/214] Uttara Sathi Chotpoti & Fuchka House: FAIL
+  [40/214] Chef Special: FAIL
+  [41/214] 5 Star Friends Kabab Ghor: FAIL
+  [42/214] Izakaya - Uttara: FAIL
+  [43/214] Hot Box: FAIL
+  [44/214] Puro Pastry & Bakery - Uttara11: FAIL
+  [45/214] Khusi Fuchka House: FAIL
+  [46/214] Tasty Treat-Shahjalal Avenue-Uttara-4: FAIL
+  [47/214] Pizza Empire: FAIL
+  [48/214] House of Ramen: FAIL
+  [49/214] Khao San - Uttara: FAIL
+  [50/214] Cha Boithok: FAIL
+  [51/214] Fork Wave: FAIL
+  [52/214] KOZO: FAIL
+  [53/214] Food Lab: FAIL
+  [54/214] LiteBites & Juices: FAIL
+  [55/214] Foodelux: FAIL
+  [56/214] Matchaya: FAIL
+  [57/214] DIET PACK: FAIL
+  [58/214] Koryori Uttara - pandago: FAIL
+  [59/214] Sultana Snacks & Fastfood: FAIL
+  [60/214] Chowmeenia: FAIL
+  [61/214] Dacca Bites & Drinks: FAIL
+  [62/214] Easy Meal: FAIL
+  [63/214] Shokher Rannaghor: FAIL
+  [64/214] Khai Khai Restaurant: FAIL
+  [65/214] Mijan Juice Bar and Restora: FAIL
+  [66/214] Seoul Spice Kitchen: FAIL
+  [67/214] Royale Spice Ghor: FAIL
+  [68/214] Five Star (Chicken Fry): FAIL
+  [69/214] Homemade food: FAIL
+  [70/214] Crunchies: FAIL
+  [71/214] Fiori Coffee and Bakery: FAIL
+  [72/214] MOMOSi: FAIL
+  [73/214] Flavor Hood: FAIL
+  [74/214] Meaty Bite: FAIL
+  [75/214] Wrapick - Uttara 14: FAIL
+  [76/214] Shaad-e-Bangla: FAIL
+  [77/214] Brothers Food Center: FAIL
+  [78/214] Jolojog - Uttara: FAIL
+  [79/214] Chi'kens: FAIL
+  [80/214] NutriBox: FAIL
+  [81/214] Pick Li: FAIL
+  [82/214] Indulge - Uttara: FAIL
+  [83/214] Home Flavor: FAIL
+  [84/214] Delifrance - Uttara: FAIL
+  [85/214] C&W: FAIL
+  [86/214] Air Fryer Cooking - Uttara: FAIL
+  [87/214] Big Q - Uttara: FAIL
+  [88/214] House of Rice: FAIL
+  [89/214] Uttara Mojammel Mamar shera Chotpoti Fuchka: FAIL
+  [90/214] Maa Home Delivery - Uttara: FAIL
+  [91/214] Matir Hari Kitchen: FAIL
+  [92/214] Juice & Fuchka: FAIL
+  [93/214] Food Flavors: FAIL
+  [94/214] Golden Rice: FAIL
+  [95/214] Punch Monkey Lazzy Bite: FAIL
+  [96/214] Oven Pizza House: FAIL
+  [97/214] Kacchi Bro Uttara: FAIL
+  [98/214] Premium Kitchen: FAIL
+  [99/214] Smokey Lane Döner Kebab: FAIL
+  [100/214] Moti's Kitchen: FAIL
+  [101/214] Bangali Bhoj: FAIL
+  [102/214] Chunkz: FAIL
+  [103/214] Binzo restro: FAIL
+  [104/214] Lobon Kitchen: FAIL
+  [105/214] The Coffee Club: FAIL
+  [106/214] Graam Cha - Uttara: FAIL
+  [107/214] Chickies: FAIL
+  [108/214] Home Of Flavor's: FAIL
+  [109/214] Ruu's The Garden Cafe: FAIL
+  [110/214] Maimuna Chotpoti & Fuchka: FAIL
+  [111/214] Mukta's Kitchen: FAIL
+  [112/214] Khichuri Ghor 2.0: FAIL
+  [113/214] Tehari Ghar + (Uttara Sec 12): FAIL
+  [114/214] Sofra Kitchen: FAIL
+  [115/214] Care Kitchen: FAIL
+  [116/214] Crispy Corner: FAIL
+  [117/214] BiteCraft - Uttara: FAIL
+  [118/214] AizaaLeen'S Kitchen: FAIL
+  [119/214] Dhakaiya Polao: FAIL
+  [120/214] Mojar Bites: FAIL
+  [121/214] Food Venture: FAIL
+  [122/214] Crosta Express: FAIL
+  [123/214] Insaf Restora: FAIL
+  [124/214] Afrin's Kitchen: FAIL
+  [125/214] RamenYum - Uttara: FAIL
+  [126/214] Radhuni's Secret: FAIL
+  [127/214] Jalapenos: FAIL
+  [128/214] Chef Kitchen: FAIL
+  [129/214] Oitijjobahi Khabar Ghor: FAIL
+  [130/214] Lunch Villa - Uttara: FAIL
+  [131/214] Red Onion - Uttara: FAIL
+  [132/214] Chicken Junction - Uttara: FAIL
+  [133/214] Rice Express - Uttara: FAIL
+  [134/214] Chatime - Uttara: FAIL
+  [135/214] Shammis Home kitchen: FAIL
+  [136/214] ENZO: FAIL
+  [137/214] Taste of Home: FAIL
+  [138/214] Spice & Spoon: FAIL
+  [139/214] Deshi Delights: FAIL
+  [140/214] FlavorHive: FAIL
+  [141/214] Pure Food Zone: FAIL
+  [142/214] West Lake Restaurant: FAIL
+  [143/214] Next Bite: FAIL
+  [144/214] Ali Hotel And Restaurant: FAIL
+  [145/214] Nanna Biriyani Sector 12: FAIL
+  [146/214] Bengal Food: FAIL
+  [147/214] Shahid's kitchen: FAIL
+  [148/214] Sayra's kitchen: FAIL
+  [149/214] Bengal Spice Restaurant: FAIL
+  [150/214] Soy: FAIL
+  [151/214] Samia's Kitchen: FAIL
+  [152/214] Bahari Ahar: FAIL
+  [153/214] Taaj Kitchen: FAIL
+  [154/214] Tarragon Restaurant- Best Western Plus Maple Leaf: FAIL
+  [155/214] MeatZo: FAIL
+  [156/214] Cafe F&B: FAIL
+  [157/214] Peter Sukh: FAIL
+  [158/214] Z I Ktichen: FAIL
+  [159/214] Nokshi Pitha Ghor: FAIL
+  [160/214] Uttara Home Kitchen: FAIL
+  [161/214] Uttara Homemade Biriyani House: FAIL
+  [162/214] Tabaq Coffee - Centrepoint: FAIL
+  [163/214] Habiba's Kitchen: FAIL
+  [164/214] Alfredough - Chef’s Table Airport: FAIL
+  [165/214] Greens & Seeds - Chef's Table Centrepoint Airport: FAIL
+  [166/214] So Juicy - Chef's Table Centerpoint Airport: FAIL
+  [167/214] Shad Tehari Ghar (Centre Point): FAIL
+  [168/214] Wok Way - Chef's Table Centrepoint: FAIL
+  [169/214] KOI Thé - Uttara chef's table: FAIL
+  [170/214] Utshob Sweets - Centrepoint Airport: FAIL
+  [171/214] Utshob - Chef's Table Centrepoint Airport: FAIL
+  [172/214] Fresh Food Bite By Jannat: FAIL
+  [173/214] Ghoroa Khabar: FAIL
+  [174/214] Sadiya Homemade Food: FAIL
+  [175/214] Howlader Homemade Food: FAIL
+  [176/214] Tastemate Bistro: FAIL
+  [177/214] Chef Canvas: FAIL
+  [178/214] Bhorpur Khawon Chand Bhai Restaurant: FAIL
+  [179/214] RS Cake: FAIL
+  [180/214] Musafir Restora: FAIL
+  [181/214] Wahida Home Kitchen: FAIL
+  [182/214] Dumanli Seafood & BBQ: FAIL
+  [183/214] Grabites: FAIL
+  [184/214] Red Dragon: FAIL
+  [185/214] Pizzaro: FAIL
+  [186/214] Polys kitchen: FAIL
+  [187/214] Bhuri Bhoj: FAIL
+  [188/214] Biryani Express: FAIL
+  [189/214] CP Five Star-Simi Food-Diyabari: FAIL
+  [190/214] Nanna Biriyani Sector 15: FAIL
+  [191/214] Musafir Khana: FAIL
+  [192/214] The Pizza: FAIL
+  [193/214] Hot & Spicy Pizza: FAIL
+  [194/214] Sara's Home Kitchen: FAIL
+  [195/214] Biryani House: FAIL
+  [196/214] Malim Home Kitchen: FAIL
+  [197/214] Nanna Biriyani Dia Bari: FAIL
+  [198/214] Crispie Bite: FAIL
+  [199/214] Foodie Stage: FAIL
+  [200/214] Ringky's Heavenly Crumbs: FAIL
+  [201/214] Swader Karkhana: FAIL
+  [202/214] Femily kitchen: FAIL
+  [203/214] Mayer Henshel: FAIL
+  [204/214] Chitrayon: FAIL
+  [205/214] Candle Park: FAIL
+  [206/214] Creamy Creation By Alpona: FAIL
+  [207/214] Poly Home Kitchen: FAIL
+  [208/214] Next Bite: FAIL
+  [209/214] Khuda Mitay: FAIL
+  [210/214] AP Food Land: FAIL
+  [211/214] Healthy Puran Dhaka Vibe: FAIL
+  [212/214] Nepali Food House: FAIL
+  [213/214] Cloud Cuisine: FAIL
+  [214/214] Poribeshon Centering: FAIL
+
+  Uttara summary: 214 restaurants, 0 dishes (0 ok, 214 failed)
+
+--- Mirpur (lat=23.8042, lng=90.3526) ---
+  [list] Fetching offset=0...
+  [list] Got 40 restaurants (40/340 total)
+  [list] Fetching offset=40...
+  [list] Got 40 restaurants (80/340 total)
+  [list] Fetching offset=80...
+  [list] Got 40 restaurants (120/340 total)
+  [list] Fetching offset=120...
+  [list] Got 40 restaurants (160/340 total)
+  [list] Fetching offset=160...
+  [list] Got 40 restaurants (200/340 total)
+  [list] Fetching offset=200...
+  [list] Got 40 restaurants (240/340 total)
+  [list] Fetching offset=240...
+  [list] Got 40 restaurants (280/340 total)
+  [list] Fetching offset=280...
+  [list] Got 40 restaurants (320/340 total)
+  [list] Fetching offset=320...
+  [list] Got 20 restaurants (340/340 total)
+
+  [detail] Fetching menus for 340 restaurants...
+  [1/340] Oven Cheese Pizza: FAIL
+  [2/340] Domino's Mirpur-Late Night: FAIL
+  [3/340] Rahi Pizza House: FAIL
+  [4/340] Canvas Kitchen: FAIL
+  [5/340] Ekra Restaurant: FAIL
+  [6/340] The Food Canvas: FAIL
+  [7/340] Moon's Food: FAIL
+  [8/340] Peemoni's Kitchen: FAIL
+  [9/340] Korean Cheese Coin: FAIL
+  [10/340] Fresh Juice Hut: FAIL
+  [11/340] Pizzio: FAIL
+  [12/340] Shishir Food Corner: FAIL
+  [13/340] Homey And Warm: FAIL
+  [14/340] Daabing: FAIL
+  [15/340] Khichuri Hut: FAIL
+  [16/340] Terra Asia Bites: FAIL
+  [17/340] Shahi Zaika: FAIL
+  [18/340] Mithai - Zoo Road: FAIL
+  [19/340] Foodie Bhai: FAIL
+  [20/340] Bismillah Biriyani House: FAIL
+  [21/340] Akhi's Kitchen: FAIL
+  [22/340] Food Valley: FAIL
+  [23/340] Ferdousi Pitta Ghor: FAIL
+  [24/340] Chatime - Mirpur 1: FAIL
+  [25/340] Iconic food: FAIL
+  [26/340] Mix Chip: FAIL
+  [27/340] Jenny's kitchen: FAIL
+  [28/340] Huzifa Kitchen: FAIL
+  [29/340] Taste With Mariya: FAIL
+  [30/340] Mayer Hater Ranna: FAIL
+  [31/340] Yamm Za: FAIL
+  [32/340] Laham: FAIL
+  [33/340] Oven Cheese Pizza: FAIL
+  [34/340] Fresh Juice Hut: FAIL
+  [35/340] Rahi Pizza House: FAIL
+  [36/340] Fry Haven: FAIL
+  [37/340] Shoilpik Restora: FAIL
+  [38/340] Kacchi Bhai - Mirpur - 1: FAIL
+  [39/340] Mayer Hater Ranna: FAIL
+  [40/340] Sausage Bite: FAIL
+  [41/340] Kebabistan: FAIL
+  [42/340] Farzana's Kitchen: FAIL
+  [43/340] Healthy Food: FAIL
+  [44/340] Mejban Bari Kabab and Restaurant: FAIL
+  [45/340] Rajbari Express Fuchka & Chotpoti: FAIL
+  [46/340] Ekra Restaurant: FAIL
+  [47/340] Fresh Eatz: FAIL
+  [48/340] Bengalis Kitchen By Dipa: FAIL
+  [49/340] Ki Khaben: FAIL
+  [50/340] Tasty Tend: FAIL
+  [51/340] Afrin Kitchen: FAIL
+  [52/340] Aurvo: FAIL
+  [53/340] Tehari Mamma: FAIL
+  [54/340] Haldi Restaurant & Cafe: FAIL
+  [55/340] Deshi Food Shop (South Bishil) - pandago: FAIL
+  [56/340] Shanta Heritage: FAIL
+  [57/340] Mayerdoa Hotel & Restaurant: FAIL
+  [58/340] Brownbites: FAIL
+  [59/340] The Shawarma House: FAIL
+  [60/340] Lava Lounge: FAIL
+  [61/340] Pizza Haven: FAIL
+  [62/340] Bangaliana Mezban: FAIL
+  [63/340] RJ Food Corner: FAIL
+  [64/340] Hack N Snack: FAIL
+  [65/340] Fish & Kabab: FAIL
+  [66/340] Cafe Delhi Darbar: FAIL
+  [67/340] Cryptails: FAIL
+  [68/340] Crust and Beans - Mirpur 6: FAIL
+  [69/340] Pizzio: FAIL
+  [70/340] Rizq: FAIL
+  [71/340] Miso Pot: FAIL
+  [72/340] Mama Chotpoti O Fuska House: FAIL
+  [73/340] Faiza Coffee House: FAIL
+  [74/340] Bachelor Rice: FAIL
+  [75/340] Ya Habibi Cafe: FAIL
+  [76/340] Shumi's Hot Cake - Monipur: FAIL
+  [77/340] Zelpy Food: FAIL
+  [78/340] Ayat's Kitchen: FAIL
+  [79/340] Mango Home Kitchen: FAIL
+  [80/340] Bangla Taste Hub: FAIL
+  [81/340] Puro Pastry & Bakery - Mirpur 6: FAIL
+  [82/340] Al-Amin Kabab Ghor: FAIL
+  [83/340] Manha Kitchen: FAIL
+  [84/340] Panda chotpoti & fuchka with fast-food: FAIL
+  [85/340] Clock Dosa Express: FAIL
+  [86/340] Ghorer Khabar: FAIL
+  [87/340] Najifa's Food: FAIL
+  [88/340] Mr. Potato: FAIL
+  [89/340] Manha Food Corner: FAIL
+  [90/340] Cht Kitchen: FAIL
+  [91/340] Morol Barir Rannaghor: FAIL
+  [92/340] Kawfol: FAIL
+  [93/340] Homemade Chef: FAIL
+  [94/340] Chill250: FAIL
+  [95/340] Talukder Cake And More: FAIL
+  [96/340] Aamej - 60 Feet: FAIL
+  [97/340] Ghoroa Shaad: FAIL
+  [98/340] Tasty Treat Ahammed Nagar Paikpara Mirpur: FAIL
+  [99/340] Tasty Garden: FAIL
+  [100/340] Maya Kitchen: FAIL
+  [101/340] Summu's Matbakh: FAIL
+  [102/340] Liza Home Kitchen: FAIL
+  [103/340] SF FOODIANA: FAIL
+  [104/340] Pach Vai Biriyani And Shawarma: FAIL
+  [105/340] Cafe Calculus: FAIL
+  [106/340] Designer's Food House: FAIL
+  [107/340] Testy Hub Mirpur: FAIL
+  [108/340] Mithi Kitchen: FAIL
+  [109/340] Flame's: FAIL
+  [110/340] Smart Food Corner: FAIL
+  [111/340] Mother's kitchen: FAIL
+  [112/340] Cafein: FAIL
+  [113/340] Crunch- Mirpur 10: FAIL
+  [114/340] Tania's Kitchen: FAIL
+  [115/340] Canvas Kitchen: FAIL
+  [116/340] Taiba's Koyel Ranna Ghor: FAIL
+  [117/340] Craving Control: FAIL
+  [118/340] Hena Test Foods: FAIL
+  [119/340] Tehari Ghor - Mirpur 10: FAIL
+  [120/340] Tahiya's Kitchen: FAIL
+  [121/340] Bangla Bhojon: FAIL
+  [122/340] Dolly's kitchen: FAIL
+  [123/340] Mariya's Kitchen: FAIL
+  [124/340] Tamanna's Kitchen: FAIL
+  [125/340] Hungry Fries: FAIL
+  [126/340] The Food Canvas: FAIL
+  [127/340] Moon's Food: FAIL
+  [128/340] Nilima's Kitchen: FAIL
+  [129/340] Rashida’s Kitchen: FAIL
+  [130/340] Ranna Bari: FAIL
+  [131/340] Food Flex: FAIL
+  [132/340] Food Museum: FAIL
+  [133/340] Food Mania: FAIL
+  [134/340] Food Valley: FAIL
+  [135/340] Korean Cheese Coin: FAIL
+  [136/340] Ling Jing Chinese Restaurant - Mirpur: FAIL
+  [137/340] Whatta Bowl - Mirpur: FAIL
+  [138/340] Alfresco - Mirpur: FAIL
+  [139/340] Banglar Ranna Ghor: FAIL
+  [140/340] Safe & Fresh food: FAIL
+  [141/340] Noor's Kitchen: FAIL
+  [142/340] Pinch Of Rizq: FAIL
+  [143/340] Rave Buffet and Rooftop: FAIL
+  [144/340] FoMo: FAIL
+  [145/340] Pizza Time: FAIL
+  [146/340] DYNAMIC: FAIL
+  [147/340] Burgerii: FAIL
+  [148/340] Afreen kitchen: FAIL
+  [149/340] Saba Food & Bakery -10: FAIL
+  [150/340] Petuk Kitchen: FAIL
+  [151/340] Four Brothers Fastfood and Live Bakery: FAIL
+  [152/340] Deshi Bytes: FAIL
+  [153/340] Roshui Ghor: FAIL
+  [154/340] Nafisa Kitchen: FAIL
+  [155/340] Brother Sister kitchen: FAIL
+  [156/340] Bhojon Rosik: FAIL
+  [157/340] Bangali food by Shairmin: FAIL
+  [158/340] Pizzamine: FAIL
+  [159/340] Aka's Kitchen: FAIL
+  [160/340] Bloom & Basil: FAIL
+  [161/340] Notun Rong: FAIL
+  [162/340] N & J Cloud And Grill: FAIL
+  [163/340] Cheese Blast: FAIL
+  [164/340] Terra Asia Bites: FAIL
+  [165/340] Paragon Momo - Shwapno Kazipara: FAIL
+  [166/340] Booom Fast Food: FAIL
+  [167/340] Khandhani Foodie: FAIL
+  [168/340] Mummy's Hotpot: FAIL
+  [169/340] The Bubble Waffle: FAIL
+  [170/340] Hard Roc'k Cafe: FAIL
+  [171/340] Food on the Wheel: FAIL
+  [172/340] The Kacchi Khai: FAIL
+  [173/340] Homemade Chinese Food: FAIL
+  [174/340] Hot & Fry Cafe & Restaurant: FAIL
+  [175/340] Rajdhani Biryani House & Restaurant - Paka Masjid: FAIL
+  [176/340] Satej juice bar & fast-food: FAIL
+  [177/340] Duaripara Juice And Sweets Corner: FAIL
+  [178/340] Mom's Homemade Kitchen: FAIL
+  [179/340] Iyana's Live Kitchen: FAIL
+  [180/340] Ghorer Hari: FAIL
+  [181/340] Kazi Hotel & Restaurant: FAIL
+  [182/340] Yummy Yummy Restora: FAIL
+  [183/340] Yummy Yummy Live Bakery: FAIL
+  [184/340] Ghorer Shad by Taslima's Food Corner: FAIL
+  [185/340] Sokher Ranna Ghor: FAIL
+  [186/340] Sumus fresh home made dine: FAIL
+  [187/340] RT Catering service: FAIL
+  [188/340] Sabina Home Kitchen: FAIL
+  [189/340] Organic kitchen: FAIL
+  [190/340] Nahar Kitchen: FAIL
+  [191/340] TTFC biriyani house: FAIL
+  [192/340] Cooking Stove Express: FAIL
+  [193/340] Taste La La Laa: FAIL
+  [194/340] Yummy Ninja: FAIL
+  [195/340] Unun: FAIL
+  [196/340] The Hungry Hippo: FAIL
+  [197/340] Happy Kitchen: FAIL
+  [198/340] Tehari Ghar - Gabtoli: FAIL
+  [199/340] Momolicious: FAIL
+  [200/340] Supreme Dinners- 60 Feet: FAIL
+  [201/340] Food Crush: FAIL
+  [202/340] Domino's Mirpur-Late Night: FAIL
+  [203/340] Shishir Food Corner: FAIL
+  [204/340] Hungry's Heaven: FAIL
+  [205/340] The Healthy Food: FAIL
+  [206/340] Home Kitchen: FAIL
+  [207/340] Meghboroni Resto & Party Center: FAIL
+  [208/340] Halal Dinnig: FAIL
+  [209/340] Nomnom Drive: FAIL
+  [210/340] Very Good Live Food: FAIL
+  [211/340] Satsotero Restaurant: FAIL
+  [212/340] Allah Dhan Biriyani House: FAIL
+  [213/340] Sub Lover's - Amtola 60 Feet: FAIL
+  [214/340] Q-Bistro-Pallabi: FAIL
+  [215/340] Bangla Ghor: FAIL
+  [216/340] Sakib Bhai Er Mukhoruchi Khabar Hotel: FAIL
+  [217/340] Fatima's Kitchen: FAIL
+  [218/340] Bismillah Adda Cart: FAIL
+Traceback (most recent call last):
+  File "C:\PROJECTS\FoodPANDA\scrape_menus.py", line 494, in <module>
+    main()
+    ~~~~^^
+  File "C:\PROJECTS\FoodPANDA\scrape_menus.py", line 442, in main
+    detail = fetch_restaurant_detail(client, code, token, lat, lng)
+  File "C:\PROJECTS\FoodPANDA\scrape_menus.py", line 200, in fetch_restaurant_detail
+    r = client.get(url, params=params, headers=headers, timeout=20)
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpx\_client.py", line 1053, in get
+    return self.request(
+           ~~~~~~~~~~~~^
+        "GET",
+        ^^^^^^
+    ...<7 lines>...
+        extensions=extensions,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpx\_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpx\_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpx\_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpx\_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpx\_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpx\_transports\default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpcore\_sync\connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpcore\_sync\connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpcore\_sync\connection.py", line 103, in handle_request
+    return self._connection.handle_request(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpcore\_sync\http2.py", line 187, in handle_request
+    raise exc
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpcore\_sync\http2.py", line 150, in handle_request
+    status, headers = self._receive_response(
+                      ~~~~~~~~~~~~~~~~~~~~~~^
+        request=request, stream_id=stream_id
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpcore\_sync\http2.py", line 294, in _receive_response
+    event = self._receive_stream_event(request, stream_id)
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpcore\_sync\http2.py", line 336, in _receive_stream_event
+    self._receive_events(request, stream_id)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpcore\_sync\http2.py", line 364, in _receive_events
+    events = self._read_incoming_data(request)
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpcore\_sync\http2.py", line 441, in _read_incoming_data
+    data = self._network_stream.read(self.READ_NUM_BYTES, timeout)
+  File "C:\Users\FSOS\AppData\Roaming\Python\Python314\site-packages\httpcore\_backends\sync.py", line 128, in read
+    return self._sock.recv(max_bytes)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Python314\Lib\ssl.py", line 1285, in recv
+    return self.read(buflen)
+           ~~~~~~~~~^^^^^^^^
+  File "C:\Python314\Lib\ssl.py", line 1140, in read
+    return self._sslobj.read(len)
+           ~~~~~~~~~~~~~~~~~^^^^^
+KeyboardInterrupt
+^CTerminate batch job (Y/N)? ^A
