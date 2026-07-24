@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <meta name="color-scheme" content="dark light">
+    <title>FoodPANDA // Restaurant Intelligence</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body data-theme="amoled" data-accent="berry" data-density="comfortable">
+    <div id="loading-spinner" class="spinner-container" role="status" aria-live="polite">
+        <div class="loader-mark">
+            <span class="loader-core"><i class="fas fa-utensils"></i></span>
+            <span class="loader-ring ring-a"></span>
+            <span class="loader-ring ring-b"></span>
+            <span class="loader-ring ring-c"></span>
+        </div>
+        <div id="loading-text" class="loading-text">Loading restaurant intelligence…</div>
+        <div class="loading-track"><span id="loading-track-fill"></span></div>
+        <span class="loading-percent"><span id="loading-percent">0</span>%</span>
+    </div>
+
+    <div class="app-container">
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+        <aside class="sidebar glass-panel" id="sidebar" aria-label="Restaurant filters">
+            <div class="sidebar-brand">
+                <div class="brand-lockup">
+                    <div class="brand-symbol"><i class="fas fa-bowl-food"></i></div>
+                    <div>
+                        <div class="brand-logo">FOOD<span class="accent">PANDA</span></div>
+                        <div class="brand-sub">Restaurant Intelligence</div>
+                    </div>
+                </div>
+                <span class="live-pill"><span></span> LIVE DATA</span>
+            </div>
+
+            <div class="sidebar-location" id="locationTabs"></div>
+
+            <div class="sidebar-search">
+                <i class="fas fa-magnifying-glass"></i>
+                <input type="text" id="sidebar-filter" placeholder="Filter cuisines & restaurants…" aria-label="Filter sidebar">
+                <kbd>/</kbd>
+            </div>
+
+            <div class="sidebar-controls">
+                <button id="select-all-btn" class="ctrl-btn action-tactile" title="Favorite visible items" aria-label="Favorite visible items"><i class="fas fa-heart-circle-plus"></i></button>
+                <button id="favorites-only-btn" class="ctrl-btn action-heart" title="Favorites only" aria-label="Favorites only"><i class="fas fa-heart"></i></button>
+                <button id="sort-toggle-btn" class="ctrl-btn action-cycle" title="Cycle sorting" aria-label="Cycle sorting"><i class="fas fa-arrow-down-wide-short"></i></button>
+                <button id="compare-mode-btn" class="ctrl-btn action-orbit" title="Comparison mode" aria-label="Comparison mode"><i class="fas fa-scale-balanced"></i></button>
+            </div>
+
+            <div class="sidebar-section-label">
+                <span>Cuisines</span>
+                <button id="clear-cuisine-btn" class="text-btn">Clear</button>
+            </div>
+            <ul id="cuisine-list" class="category-list"></ul>
+
+            <div class="sidebar-stats" id="sidebar-stats"></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="dashboard-header glass-panel">
+                <div class="header-left">
+                    <button id="sidebar-toggle" class="icon-btn sidebar-toggle-btn" aria-label="Open sidebar"><i class="fas fa-bars-staggered"></i></button>
+                    <div class="view-heading">
+                        <div class="eyebrow"><span class="status-dot"></span> MARKET PULSE</div>
+                        <h2 id="current-view-title">FoodPANDA Unified</h2>
+                    </div>
+                    <div class="search-wrapper">
+                        <i class="fas fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="product-search" class="search-input" placeholder="Search restaurants, dishes, or cuisines…" autocomplete="off">
+                        <button id="clear-search" class="clear-search" aria-label="Clear search"><i class="fas fa-times"></i></button>
+                        <button id="command-open" class="command-key" aria-label="Open command palette"><kbd>Ctrl K</kbd></button>
+                        <div id="search-suggestions" class="suggestions-box glass-panel"></div>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <select id="sort-options" class="filter-select" aria-label="Sort results">
+                        <option value="distance">Nearest</option>
+                        <option value="rating">Top Rated</option>
+                        <option value="reviews">Most Reviewed</option>
+                        <option value="delivery">Fastest Delivery</option>
+                        <option value="name_asc">Name A–Z</option>
+                        <option value="price_asc">Budget First</option>
+                        <option value="price_desc">Premium First</option>
+                        <option value="price_drop">Biggest Price Drop</option>
+                        <option value="price_rise">Biggest Price Rise</option>
+                    </select>
+
+                    <div class="view-toggle" aria-label="Choose view">
+                        <button class="view-btn active" data-view="restaurants" title="Restaurant grid"><i class="fas fa-store"></i><span>Places</span></button>
+                        <button class="view-btn" data-view="dishes" title="Dish grid"><i class="fas fa-utensils"></i><span>Dishes</span></button>
+                        <button class="view-btn" data-view="analytics" title="Analytics"><i class="fas fa-chart-simple"></i><span>Insights</span></button>
+                    </div>
+
+                    <div class="header-actions action-counters">
+                        <button id="alerts-btn" class="counter-action" title="Price alerts"><i class="fas fa-bell"></i><span>Alerts</span><b id="alerts-count">0</b></button>
+                        <button id="header-compare-btn" class="counter-action" title="Open comparison"><i class="fas fa-scale-balanced"></i><span>Compare</span><b id="header-compare-count">0</b></button>
+                        <button id="cart-btn" class="counter-action" title="Open cart"><i class="fas fa-cart-shopping"></i><span>Cart</span><b id="cart-count">0</b></button>
+                        <button id="theme-toggle" class="icon-btn theme-toggle action-eclipse" title="Toggle light / AMOLED theme" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+                        <button id="density-toggle" class="icon-btn action-compress" title="Toggle density" aria-label="Toggle density"><i class="fas fa-table-cells-large"></i></button>
+                        <button id="focus-toggle" class="icon-btn action-focus" title="Immersive best picks" aria-label="Immersive best picks"><i class="fas fa-expand"></i></button>
+                    </div>
+
+                    <div class="grid-controls">
+                        <div class="grid-size-wrap" title="Cards per row">
+                            <i class="fas fa-grip"></i>
+                            <input type="range" id="gridSize" min="2" max="6" value="3" aria-label="Grid columns">
+                            <span class="grid-size-val" id="gridSizeVal">3</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="intelligence-bar glass-panel" aria-label="Quick intelligence filters">
+                <div class="intel-scroll">
+                    <button class="intel-btn intel-fire" data-filter="popular"><i class="fas fa-fire"></i> Popular</button>
+                    <button class="intel-btn intel-bolt" data-filter="fast"><i class="fas fa-bolt"></i> Fast Delivery</button>
+                    <button class="intel-btn intel-star" data-filter="toprated"><i class="fas fa-star"></i> Top Rated</button>
+                    <button class="intel-btn intel-menu" data-filter="hasmenu"><i class="fas fa-book-open"></i> Has Menu</button>
+                    <button class="intel-btn intel-tag" data-filter="discount"><i class="fas fa-tag"></i> Discounts</button>
+                    <button class="intel-btn intel-clock" data-filter="new"><i class="fas fa-clock"></i> New</button>
+                    <button class="intel-btn intel-wallet" data-filter="budget"><i class="fas fa-wallet"></i> Budget</button>
+                    <button class="intel-btn intel-preorder" data-filter="preorder"><i class="fas fa-calendar-check"></i> Pre-order</button>
+                </div>
+                <button id="surprise-btn" class="surprise-btn"><i class="fas fa-wand-magic-sparkles"></i><span>Surprise me</span></button>
+            </section>
+
+            <section id="price-intelligence-panel" class="price-intelligence glass-panel" hidden aria-label="Dish price intelligence filters">
+                <div class="price-filter-row">
+                    <button class="price-filter-btn" data-price-filter="great_deal"><i class="fas fa-gem"></i><span>Great Deal</span><b>15%+</b></button>
+                    <button class="price-filter-btn" data-price-filter="good_buy"><i class="fas fa-thumbs-up"></i><span>Good Buy</span><b>5%+</b></button>
+                    <label class="inline-number-control drop-control"><button type="button" id="custom-drop-btn" class="price-filter-btn" data-price-filter="custom_drop"><i class="fas fa-arrow-trend-down"></i><span>Drop ≥</span></button><input id="custom-drop-pct" type="number" min="1" max="95" value="12" inputmode="numeric" aria-label="Custom price drop percent"><b>%</b></label>
+                    <button class="price-filter-btn" data-price-filter="wait"><i class="fas fa-hourglass-half"></i><span>Wait</span></button>
+                    <button class="price-filter-btn" data-price-filter="all_time_low"><i class="fas fa-arrow-down-long"></i><span>All Time Low</span></button>
+                    <button class="price-filter-btn" data-price-filter="new_items"><i class="fas fa-sparkles"></i><span>New Items</span></button>
+                    <button class="price-filter-btn" data-price-filter="price_change"><i class="fas fa-chart-line"></i><span>Price Change</span></button>
+                </div>
+                <div class="price-range-row">
+                    <label class="compact-field"><span>New in:</span><input id="new-days" type="number" min="1" max="365" value="7" inputmode="numeric"><b>days</b></label>
+                    <div class="date-control-group"><span>New Only:</span><input id="new-range-from" type="date" aria-label="New only from date"><span>to</span><input id="new-range-to" type="date" aria-label="New only to date"><button class="range-apply-btn" data-price-filter="new_range">Apply</button></div>
+                    <div class="date-control-group mean-range"><span>Mean Analysis:</span><input id="mean-date-from" type="date" aria-label="Mean analysis start date"><span>to</span><input id="mean-date-to" type="date" aria-label="Mean analysis end date"><button id="clear-mean-range" class="range-clear-btn" title="Clear mean date range"><i class="fas fa-xmark"></i></button></div>
+                </div>
+            </section>
+
+            <section class="stats-bar" aria-label="Market statistics">
+                <button class="stat-item stat-total" id="stat-total-btn">
+                    <span class="stat-icon"><i class="fas fa-store"></i></span>
+                    <span class="stat-copy"><span class="stat-label">Restaurants</span><span class="stat-value" id="total-items">0</span></span>
+                    <span class="stat-spark spark-a"></span>
+                </button>
+                <button class="stat-item stat-dishes" id="stat-dishes-btn">
+                    <span class="stat-icon"><i class="fas fa-bowl-rice"></i></span>
+                    <span class="stat-copy"><span class="stat-label">Dishes indexed</span><span class="stat-value" id="total-dishes">0</span></span>
+                    <span class="stat-spark spark-b"></span>
+                </button>
+                <button class="stat-item stat-offers" id="stat-good-buys-btn">
+                    <span class="stat-icon"><i class="fas fa-tags"></i></span>
+                    <span class="stat-copy"><span class="stat-label">With offers</span><span class="stat-value" id="discount-count">0</span></span>
+                    <span class="stat-spark spark-c"></span>
+                </button>
+                <button class="stat-item stat-rating" id="stat-rating-btn">
+                    <span class="stat-icon"><i class="fas fa-star"></i></span>
+                    <span class="stat-copy"><span class="stat-label">Average rating</span><span class="stat-value" id="average-rating">0.0</span></span>
+                    <span class="stat-spark spark-d"></span>
+                </button>
+            </section>
+
+            <section class="results-toolbar glass-panel">
+                <div>
+                    <span id="results-count" class="results-count">0 results</span>
+                    <span id="results-context" class="results-context">Ready to explore</span>
+                </div>
+                <div id="active-filter-chips" class="active-filter-chips"></div>
+                <button id="reset-filters-btn" class="reset-btn"><i class="fas fa-rotate-left"></i> Reset</button>
+            </section>
+
+            <div id="main-content-area">
+                <div id="sh-grid" class="p-view-sh" aria-live="polite"></div>
+
+                <div id="analytics-panel" class="analytics-panel" hidden>
+                    <div class="analytics-hero glass-panel">
+                        <div>
+                            <div class="eyebrow">LIVE MARKET INTELLIGENCE</div>
+                            <h3>What is happening in this delivery zone?</h3>
+                            <p>Explore cuisine supply, price positioning, delivery speed, menu depth, and discount coverage.</p>
+                        </div>
+                        <button id="refresh-analytics-btn" class="refresh-analytics-btn"><i class="fas fa-arrows-rotate"></i> Refresh data</button>
+                    </div>
+                    <div class="analytics-kpi" id="kpiRow"></div>
+                    <div class="analytics-grid">
+                        <div class="analytics-card chart-card-a"><h4>Restaurants by Cuisine</h4><canvas id="chartCuisine"></canvas></div>
+                        <div class="analytics-card chart-card-b"><h4>Rating Distribution</h4><canvas id="chartRating"></canvas></div>
+                        <div class="analytics-card chart-card-c"><h4>Delivery Time Distribution</h4><canvas id="chartDelivery"></canvas></div>
+                        <div class="analytics-card chart-card-d"><h4>Price Range Distribution</h4><canvas id="chartPrice"></canvas></div>
+                        <div class="analytics-card chart-card-e"><h4>Avg Dish Price by Category</h4><canvas id="chartCuisinePrice"></canvas></div>
+                        <div class="analytics-card chart-card-f"><h4>Dish Count by Restaurant</h4><canvas id="chartDishCount"></canvas></div>
+                        <div class="analytics-card chart-card-g"><h4>Discount Analysis</h4><canvas id="chartDiscount"></canvas></div>
+                        <div class="analytics-card leaderboard-card-a"><h4>Top Cuisines</h4><div class="leaderboard" id="leaderCuisines"></div></div>
+                        <div class="analytics-card leaderboard-card-b"><h4>Most Reviewed</h4><div class="leaderboard" id="leaderReviews"></div></div>
+                        <div class="analytics-card leaderboard-card-c"><h4>Top Rated</h4><div class="leaderboard" id="leaderRating"></div></div>
+                        <div class="analytics-card analytics-table-card">
+                            <h4>Dish Price Stats by Category</h4>
+                            <div class="table-scroll">
+                                <table class="analytics-table">
+                                    <thead><tr><th>Category</th><th>Dishes</th><th>Avg Price</th><th>Min</th><th>Max</th><th>Spread</th><th>Discounted</th><th>Avg Disc%</th></tr></thead>
+                                    <tbody id="cuisinePriceTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="compare-tray" class="compare-tray glass-panel" aria-live="polite">
+        <div class="compare-tray-copy">
+            <span class="compare-tray-icon"><i class="fas fa-scale-balanced"></i></span>
+            <div><strong>Comparison tray</strong><span id="compare-status">Choose 2–6 items</span></div>
+        </div>
+        <div id="compare-preview" class="compare-preview"></div>
+        <div class="compare-actions">
+            <button id="compare-clear" class="tray-btn secondary">Clear</button>
+            <button id="compare-exit" class="tray-btn secondary">Exit</button>
+            <button id="compare-now" class="tray-btn primary" disabled>Compare now</button>
+        </div>
+    </div>
+
+    <button id="focus-exit" class="focus-exit glass-panel"><i class="fas fa-compress"></i> Exit focus</button>
+
+    <div class="scroll-nav">
+        <button id="scroll-top" class="scroll-btn scroll-up" title="Scroll to top"><i class="fas fa-arrow-up"></i></button>
+        <button id="scroll-bottom" class="scroll-btn scroll-down" title="Scroll to bottom"><i class="fas fa-arrow-down"></i></button>
+    </div>
+
+    <div id="toast-stack" class="toast-stack" aria-live="polite" aria-atomic="true"></div>
+
+    <div id="restaurant-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-restaurant-name">
+        <div class="modal-content full-screen-modal glass-panel">
+            <div class="modal-header" id="modal-header">
+                <div class="modal-header-info">
+                    <div class="eyebrow">RESTAURANT PROFILE</div>
+                    <h2 id="modal-restaurant-name"></h2>
+                    <div id="modal-meta" class="modal-meta"></div>
+                </div>
+                <div class="modal-header-actions">
+                    <button id="modal-favorite" class="modal-action-btn" title="Favorite"><i class="fas fa-heart"></i></button>
+                    <button id="modal-compare" class="modal-action-btn" title="Compare"><i class="fas fa-scale-balanced"></i></button>
+                    <button class="modal-close-btn" id="modal-close" aria-label="Close"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="modal-menu-tools">
+                <div class="modal-menu-search"><i class="fas fa-magnifying-glass"></i><input id="modal-menu-search" placeholder="Search this menu…"></div>
+                <span id="modal-menu-count"></span>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <div id="comparison-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="comparison-title">
+        <div class="modal-content comparison-content glass-panel">
+            <div class="modal-header comparison-header">
+                <div><div class="eyebrow">SIDE-BY-SIDE INTELLIGENCE</div><h2 id="comparison-title">Compare selections</h2></div>
+                <button class="modal-close-btn" id="comparison-close" aria-label="Close comparison"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="comparison-body" class="comparison-body"></div>
+        </div>
+    </div>
+
+    <div id="dish-modal" class="modal dish-modal" role="dialog" aria-modal="true" aria-labelledby="dish-modal-name">
+        <div id="dish-history-shell" class="dish-history-shell glass-panel">
+            <div id="dish-history-bg" class="dish-history-bg" aria-hidden="true"></div>
+            <header class="dish-history-header">
+                <button id="dish-prev" class="dish-cycle-btn" aria-label="Previous dish"><i class="fas fa-chevron-left"></i></button>
+                <div class="dish-history-title"><span id="dish-position" class="eyebrow">DISH PRICE INTELLIGENCE</span><h2 id="dish-modal-name"></h2><p id="dish-modal-restaurant"></p></div>
+                <div class="dish-header-actions">
+                    <button id="dish-cart-toggle" class="modal-action-btn" title="Add to cart"><i class="fas fa-cart-plus"></i></button>
+                    <button id="dish-favorite-toggle" class="modal-action-btn" title="Favorite"><i class="fas fa-heart"></i></button>
+                    <button id="dish-compare-toggle" class="modal-action-btn" title="Compare"><i class="fas fa-scale-balanced"></i></button>
+                    <button id="dish-modal-close" class="modal-close-btn" aria-label="Close"><i class="fas fa-times"></i></button>
+                </div>
+                <button id="dish-next" class="dish-cycle-btn" aria-label="Next dish"><i class="fas fa-chevron-right"></i></button>
+            </header>
+            <nav class="dish-tabs" aria-label="Dish details tabs">
+                <button class="dish-tab active" data-dish-tab="history"><i class="fas fa-chart-line"></i> Price history</button>
+                <button class="dish-tab" data-dish-tab="details"><i class="fas fa-circle-info"></i> Details</button>
+                <span id="history-source-badge" class="history-source-badge"></span>
+            </nav>
+            <div class="dish-history-body">
+                <section id="dish-tab-history" class="dish-tab-panel active">
+                    <div id="dish-history-kpis" class="dish-history-kpis"></div>
+                    <div class="dish-chart-wrap"><canvas id="dish-history-chart"></canvas><div id="dish-history-empty" class="dish-history-empty" hidden></div></div>
+                    <div class="dish-alert-actions">
+                        <button id="alert-drop-btn" class="alert-action drop"><i class="fas fa-arrow-trend-down"></i><span>Alert on drop</span></button>
+                        <button id="alert-rise-btn" class="alert-action rise"><i class="fas fa-arrow-trend-up"></i><span>Alert on rise</span></button>
+                    </div>
+                </section>
+                <section id="dish-tab-details" class="dish-tab-panel"><div id="dish-detail-content" class="dish-detail-content"></div></section>
+            </div>
+            <div class="swipe-hint"><i class="fas fa-arrows-left-right"></i> Use arrows or swipe to cycle dishes</div>
+        </div>
+    </div>
+
+    <div id="alerts-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="alerts-title">
+        <div class="manager-modal glass-panel"><div class="manager-header"><div><span class="eyebrow">LOCAL PRICE MONITORS</span><h2 id="alerts-title">Drop & rise alerts</h2></div><button id="alerts-close" class="modal-close-btn"><i class="fas fa-times"></i></button></div><div id="alerts-list" class="manager-list"></div></div>
+    </div>
+
+    <div id="cart-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+        <div class="manager-modal glass-panel"><div class="manager-header"><div><span class="eyebrow">SAVED DISHES</span><h2 id="cart-title">Cart</h2></div><button id="cart-close" class="modal-close-btn"><i class="fas fa-times"></i></button></div><div id="cart-list" class="manager-list"></div><div class="cart-footer"><button id="cart-clear" class="tray-btn secondary">Clear cart</button><strong id="cart-total">৳0</strong></div></div>
+    </div>
+
+    <div id="command-modal" class="command-modal" role="dialog" aria-modal="true" aria-label="Command palette">
+        <div class="command-palette glass-panel">
+            <div class="command-input-wrap">
+                <i class="fas fa-terminal"></i>
+                <input id="command-search" placeholder="Type a command…" autocomplete="off">
+                <kbd>Esc</kbd>
+            </div>
+            <div id="command-list" class="command-list"></div>
+            <div class="command-footer"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>Enter</kbd> run</span><span><kbd>/</kbd> search</span></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
