@@ -164,6 +164,8 @@ This project is fully static and zero-backend dependent.
    - **Branch**: Choose `main` / `root` directory `/`
 4. Click **Save**. The website will be live at `https://ranehal.github.io/FoodPANDA-RESTaurant-ANALytics/`.
 
+> **Note**: A `.nojekyll` file is included in the root folder to prevent GitHub Pages from bypassing nested folders.
+
 ---
 
 ## 🛠️ Tech Stack & Dependencies
