@@ -1,0 +1,21 @@
+# Large raw binary/har dumps
+foodpanda_26.28.0.apk
+*.apk
+*.har
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# System / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Auth Token (Keep data structure reproducible)
+# data/token.txt
