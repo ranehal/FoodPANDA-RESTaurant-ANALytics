@@ -286,6 +286,7 @@ def parse_graphql_detail(data):
             "name": cat_name,
         })
 
+        if not cat or not isinstance(cat, dict): continue
         for prod in cat.get("products", []):
             pid = prod.get("id", "")
             title = prod.get("title", "")
