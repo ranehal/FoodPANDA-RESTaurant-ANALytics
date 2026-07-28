@@ -95,7 +95,7 @@ def make_auth_headers(token):
 
 def make_client():
     """Create a fresh HTTP client."""
-    return httpx.Client(http2=True, follow_redirects=True)
+    return httpx.Client(http2=False, follow_redirects=True, timeout=30)
 
 
 def fetch_restaurant_listing(client, token, lat, lng, offset=0, limit=PAGE_SIZE):
@@ -118,7 +118,12 @@ def fetch_restaurant_listing(client, token, lat, lng, offset=0, limit=PAGE_SIZE)
     }
     headers = make_auth_headers(token)
 
-    r = client.post(url, json=body, headers=headers, timeout=20)
+    try:
+        r = client.post(url, json=body, headers=headers, timeout=20)
+    except (httpx.ConnectError, httpx.ReadError, httpx.RemoteProtocolError,
+            httpx.TimeoutException, ConnectionResetError, OSError) as ex:
+        print(f"  [list] Connection error: {type(ex).__name__}: {ex}")
+        return None, f"connection_error"
 
     if r.status_code == 401:
         return None, "unauthorized"
@@ -476,7 +481,21 @@ def main():
 
         while True:
             print(f"  [list] Fetching offset={offset}...")
-            result, status = fetch_restaurant_listing(client, token, lat, lng, offset)
+
+            result, status = None, None
+            for list_attempt in range(MAX_RETRIES):
+                result, status = fetch_restaurant_listing(client, token, lat, lng, offset)
+                if status not in ("connection_error",):
+                    break
+                if list_attempt < MAX_RETRIES - 1:
+                    wait = (list_attempt + 1) * 5
+                    print(f"  [retry] Connection error, retrying in {wait}s (attempt {list_attempt+2}/{MAX_RETRIES})...")
+                    try:
+                        client.close()
+                    except Exception:
+                        pass
+                    client = make_client()
+                    time.sleep(wait)
 
             if status == "unauthorized":
                 print("  [auth] Token expired during listing, refreshing...")
@@ -485,6 +504,9 @@ def main():
                     token = new_token
                     print("  [auth] Refreshed token, retrying...")
                     result, status = fetch_restaurant_listing(client, token, lat, lng, offset)
+                    if status == "connection_error":
+                        print(f"  [retry] Connection error after token refresh, skipping location")
+                        break
                 if status != "ok":
                     print(f"  [list] Failed after refresh: {status}")
                     break
