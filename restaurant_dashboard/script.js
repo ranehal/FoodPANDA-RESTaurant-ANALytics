@@ -97,14 +97,26 @@ async function init() {
 
 async function loadData() {
     try {
-        const hyparquet = await import('https://cdn.jsdelivr.net/npm/hyparquet@1.7.0/+esm');
+        const [hyparquet, fzstd] = await Promise.all([
+            import('https://cdn.jsdelivr.net/npm/hyparquet@1.7.0/+esm'),
+            import('https://cdn.jsdelivr.net/npm/fzstd@0.1.1/+esm')
+        ]);
         updateLoading('Reading parquet dataset…', 14);
         const resp = await fetch('data.parquet');
         if (!resp.ok) throw new Error('data.parquet not found');
         const buffer = await resp.arrayBuffer();
         updateLoading('Decoding parquet columns…', 26);
+        const compressors = {
+            ZSTD: (input, outputLength) => fzstd.decompress(input, outputLength ? new Uint8Array(outputLength) : undefined)
+        };
         const rows = await new Promise((resolve, reject) => {
-            hyparquet.parquetRead({ file: buffer, onComplete: resolve, onError: reject });
+            hyparquet.parquetRead({
+                file: buffer,
+                compressors,
+                rowFormat: 'object',
+                onComplete: resolve,
+                onError: reject
+            });
         });
         if (!Array.isArray(rows) || rows.length === 0) throw new Error('Empty parquet');
         updateLoading('Reconstructing dataset…', 34);
@@ -122,23 +134,23 @@ function reconstructFromParquet(rows) {
     const locMap = new Map();
     for (const row of rows) {
         const locName = row.loc_name || '';
-        if (!locMap.has(locName)) locMap.set(locName, { name: locName, lat: row.loc_lat || 0, lng: row.loc_lng || 0, restMap: new Map() });
+        if (!locMap.has(locName)) locMap.set(locName, { name: locName, lat: Number(row.loc_lat || 0), lng: Number(row.loc_lng || 0), restMap: new Map() });
         const loc = locMap.get(locName);
         const rid = row.r_id != null ? Number(row.r_id) : 0;
         if (!loc.restMap.has(rid)) {
             loc.restMap.set(rid, {
                 id: rid, code: row.r_code || '', name: row.r_name || '', image: row.r_image || '',
                 cuisineList: safeJSON(row.r_cuisines, []), cuisineObjects: safeJSON(row.r_cuisineObjects, []),
-                primaryCuisine: row.r_primary || '', rating: row.r_rating || 0, reviewCount: row.r_reviews || 0,
-                deliveryTime: row.r_delivery || 0, deliveryTimeMax: row.r_deliveryMax || 0, deliveryTimeText: row.r_deliveryText || '',
-                distance: row.r_dist || 0, minimumOrder: row.r_minOrder || 0, deliveryFee: row.r_delFee || 0,
-                budget: row.r_budget || 0, priceRange: row.r_priceRange || '', hasDiscount: !!row.r_discount,
-                discountTags: safeJSON(row.r_discountTags, []), latitude: row.r_lat || 0, longitude: row.r_lng || 0,
+                primaryCuisine: row.r_primary || '', rating: Number(row.r_rating || 0), reviewCount: Number(row.r_reviews || 0),
+                deliveryTime: Number(row.r_delivery || 0), deliveryTimeMax: Number(row.r_deliveryMax || 0), deliveryTimeText: row.r_deliveryText || '',
+                distance: Number(row.r_dist || 0), minimumOrder: Number(row.r_minOrder || 0), deliveryFee: Number(row.r_delFee || 0),
+                budget: Number(row.r_budget || 0), priceRange: row.r_priceRange || '', hasDiscount: !!row.r_discount,
+                discountTags: safeJSON(row.r_discountTags, []), latitude: Number(row.r_lat || 0), longitude: Number(row.r_lng || 0),
                 isActive: !!row.r_active, isDeliveryEnabled: !!row.r_delEnabled, isPreorderEnabled: !!row.r_preorder,
                 webPath: row.r_webPath || '', redirectionUrl: row.r_redirect || '', isPopular: !!row.r_popular,
                 isNew: !!row.r_new, verticalType: safeJSON(row.r_verticalType, []),
                 categories: safeJSON(row.r_categories, []), menus: {},
-                minOrderValue: row.r_minOrderVal || 0, preparationTime: row.r_prepTime || 0,
+                minOrderValue: Number(row.r_minOrderVal || 0), preparationTime: Number(row.r_prepTime || 0),
                 workingHours: safeJSON(row.r_workHours, {})
             });
         }
@@ -146,9 +158,9 @@ function reconstructFromParquet(rows) {
         if (row.d_id != null) {
             const did = String(row.d_id);
             if (!rest.menus[did]) rest.menus[did] = {
-                id: row.d_id, name: row.d_name || '', price: row.d_price || 0, oldPrice: row.d_oldPrice || 0,
+                id: row.d_id, name: row.d_name || '', price: Number(row.d_price || 0), oldPrice: Number(row.d_oldPrice || 0),
                 description: row.d_desc || '', image: row.d_image || '', isAvailable: !!row.d_avail,
-                isPopular: !!row.d_popular, category: row.d_cat || '', rating: row.d_rating || 0
+                isPopular: !!row.d_popular, category: row.d_cat || '', rating: Number(row.d_rating || 0)
             };
         }
     }
