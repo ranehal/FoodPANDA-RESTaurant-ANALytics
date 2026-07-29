@@ -300,26 +300,29 @@ function dateKey(date) {
 function normalizeDishHistory(dish) {
     const raw = dish.priceHistory || dish.price_history || dish.history || dish.historicalPrices || dish.priceRecords || dish.historyData;
     const points = [];
-    const addPoint = (dateValue, priceValue) => {
+    const addPoint = (dateValue, priceValue, oldPriceValue) => {
         const date = dateFrom(dateValue);
         const price = numberFrom(priceValue);
-        if (date && price) points.push({ date: dateKey(date), price });
+        const oldPrice = numberFrom(oldPriceValue) || (dish.oldPrice > price ? Number(dish.oldPrice) : price);
+        if (date && price) points.push({ date: dateKey(date), price, oldPrice });
     };
     if (Array.isArray(raw)) {
         raw.forEach(entry => {
             if (entry && typeof entry === 'object') {
                 addPoint(entry.date || entry.day || entry.timestamp || entry.recordedAt || entry.created_at || entry.datetime,
-                    entry.price || entry.actualPrice || entry.actual_price || entry.value || entry.amount || entry.salePrice);
+                    entry.price || entry.actualPrice || entry.actual_price || entry.value || entry.amount || entry.salePrice,
+                    entry.oldPrice || entry.old_price || entry.originalPrice || entry.original_price);
             }
         });
     } else if (raw && typeof raw === 'object') {
-        Object.entries(raw).forEach(([date,value]) => addPoint(date, typeof value === 'object' ? (value.price || value.value || value.amount) : value));
+        Object.entries(raw).forEach(([date,value]) => addPoint(date, typeof value === 'object' ? (value.price || value.value || value.amount) : value, typeof value === 'object' ? (value.oldPrice || value.originalPrice) : 0));
     }
-    if (points.length === 0 && dish.oldPrice > dish.price && dish.oldPrice > 0) {
+    if (points.length === 0 && (dish.price > 0 || dish.oldPrice > 0)) {
         const today = new Date();
         const prev = new Date(today.getTime() - 7 * 86400 * 1000);
-        points.push({ date: dateKey(prev), price: Number(dish.oldPrice) });
-        points.push({ date: dateKey(today), price: Number(dish.price) });
+        const orig = dish.oldPrice > dish.price && dish.oldPrice > 0 ? Number(dish.oldPrice) : Number(dish.price);
+        points.push({ date: dateKey(prev), price: orig, oldPrice: orig });
+        points.push({ date: dateKey(today), price: Number(dish.price), oldPrice: orig });
     }
     const unique = new Map(points.map(point => [point.date, point]));
     const normalized = [...unique.values()].sort((a,b) => a.date.localeCompare(b.date));
@@ -358,7 +361,7 @@ function computeDishMetrics(dish) {
         current, previous, average, minimum, maximum, changePct, dealPct,
         dropPct:Math.max(0,-changePct), risePct:Math.max(0,changePct),
         hasHistory,
-        isAllTimeLow:hasHistory && current <= Math.min(...allHistoricalPrices) + .01,
+        isAllTimeLow:hasHistory && current <= Math.min(...allHistoricalPrices) + .01 && (dish.oldPrice > current || (allHistoricalPrices.length > 1 && Math.max(...allHistoricalPrices) > current + .01)),
         ageDays,
         isNew:Number.isFinite(ageDays) && ageDays <= newDays,
         isNewRange:Boolean(firstKey) && (!newRangeFrom || firstKey >= newRangeFrom) && (!newRangeTo || firstKey <= newRangeTo)
@@ -428,6 +431,34 @@ function setupEventListeners() {
     });
 
     document.querySelectorAll('.view-btn').forEach(btn => btn.addEventListener('click', () => setView(btn.dataset.view)));
+    document.querySelectorAll('.chart-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const key = btn.dataset.key;
+            chartDatasetVisibility[key] = !chartDatasetVisibility[key];
+            btn.classList.toggle('active', chartDatasetVisibility[key]);
+            if (dishHistoryChart) {
+                const idx = key === 'ori' ? 0 : key === 'disc' ? 1 : 2;
+                dishHistoryChart.setDatasetVisibility(idx, chartDatasetVisibility[key]);
+                dishHistoryChart.update();
+            }
+        });
+    });
+    document.querySelectorAll('.tb-graph-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const key = btn.dataset.graphFilter;
+            toolbarGraphFilters[key] = !toolbarGraphFilters[key];
+            btn.classList.toggle('active', toolbarGraphFilters[key]);
+            chartDatasetVisibility[key] = toolbarGraphFilters[key];
+            const modalBtn = document.querySelector(`.chart-toggle-btn[data-key="${key}"]`);
+            if (modalBtn) modalBtn.classList.toggle('active', toolbarGraphFilters[key]);
+            if (dishHistoryChart) {
+                const idx = key === 'ori' ? 0 : key === 'disc' ? 1 : 2;
+                dishHistoryChart.setDatasetVisibility(idx, toolbarGraphFilters[key]);
+                dishHistoryChart.update();
+            }
+            renderGrid();
+        });
+    });
     document.getElementById('gridSize').addEventListener('input', e => {
         gridCols = Number(e.target.value);
         localStorage.setItem('fp_grid_cols', gridCols);
@@ -678,6 +709,9 @@ function getFilteredDishes() {
         if (activeCuisine && !(d._restaurant?.cuisineList || []).includes(activeCuisine) && d.category !== activeCuisine) return false;
         const r = d._restaurant;
         const m = d._metrics;
+        if (!toolbarGraphFilters.ori && d.oldPrice > d.price) return false;
+        if (!toolbarGraphFilters.disc && !(d.oldPrice > d.price)) return false;
+        if (!toolbarGraphFilters.ori && !toolbarGraphFilters.disc) return false;
         if (activeIntelFilter === 'discount' && !d._discountPct) return false;
         if (activeIntelFilter === 'popular' && !r?.isPopular) return false;
         if (activeIntelFilter === 'fast' && (r?.deliveryTime || 999) > 30) return false;
@@ -1370,6 +1404,8 @@ function renderDishModal() {
     updateDishActionStates();
     requestAnimationFrame(renderDishHistoryChart);
 }
+let toolbarGraphFilters = { ori: true, disc: true };
+let chartDatasetVisibility = { ori: true, disc: true, mean: true };
 function renderDishHistoryChart() {
     const dish = dishById.get(String(currentDishId));
     const canvas = document.getElementById('dish-history-chart');
@@ -1393,11 +1429,12 @@ function renderDishHistoryChart() {
         data:{
             labels:displayHistory.map(point => new Date(`${point.date}T12:00:00`).toLocaleDateString('en-US',{month:'short',day:'numeric',year:displayHistory.length > 180 ? '2-digit' : undefined})),
             datasets:[
-                {label:'Recorded price',data:displayHistory.map(point=>point.price),borderColor:colors.accent,backgroundColor:'transparent',fill:false,borderWidth:3,pointRadius:displayHistory.length > 60 ? 0 : 2,pointHoverRadius:5,tension:.2},
-                {label:'Recorded mean',data:displayHistory.map(()=>average),borderColor:colors.secondary,borderDash:[7,6],backgroundColor:'transparent',borderWidth:1.5,pointRadius:0}
+                {label:'Original Price',data:displayHistory.map(point=>point.oldPrice || point.price),borderColor:'#10b981',backgroundColor:'transparent',fill:false,borderWidth:2.5,pointRadius:displayHistory.length > 60 ? 0 : 3,pointHoverRadius:6,tension:.2,hidden:!chartDatasetVisibility.ori},
+                {label:'Discounted Price',data:displayHistory.map(point=>point.price),borderColor:colors.accent,backgroundColor:'transparent',fill:false,borderWidth:2.5,pointRadius:displayHistory.length > 60 ? 0 : 3,pointHoverRadius:6,tension:.2,hidden:!chartDatasetVisibility.disc},
+                {label:'Recorded Mean',data:displayHistory.map(()=>average),borderColor:colors.secondary,borderDash:[7,6],backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,hidden:!chartDatasetVisibility.mean}
             ]
         },
-        options:{responsive:true,maintainAspectRatio:false,animation:false,normalized:true,devicePixelRatio:Math.min(window.devicePixelRatio || 1,1.5),interaction:{mode:'index',intersect:false},layout:{padding:{top:84,right:20,bottom:52,left:12}},plugins:{legend:{labels:{color:colors.text,usePointStyle:true}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${formatMoney(ctx.parsed.y)}`}}},scales:{x:{grid:{display:false},ticks:{color:colors.muted,maxTicksLimit:10,maxRotation:0}},y:{grid:{color:colors.grid},ticks:{color:colors.muted,callback:value=>formatMoney(value)}}}}
+        options:{responsive:true,maintainAspectRatio:false,animation:false,normalized:true,devicePixelRatio:Math.min(window.devicePixelRatio || 1,1.5),interaction:{mode:'index',intersect:false},layout:{padding:{top:115,right:20,bottom:65,left:12}},plugins:{legend:{labels:{color:colors.text,usePointStyle:true}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${formatMoney(ctx.parsed.y)}`}}},scales:{x:{grid:{display:false},ticks:{color:colors.muted,maxTicksLimit:10,maxRotation:0}},y:{grid:{color:colors.grid},ticks:{color:colors.muted,callback:value=>formatMoney(value)}}}}
     });
 }
 function applyTheme(value,persist = true) {

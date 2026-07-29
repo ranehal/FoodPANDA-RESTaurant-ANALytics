@@ -120,19 +120,15 @@ def fetch_restaurant_listing(client, token, lat, lng, offset=0, limit=PAGE_SIZE)
 
     try:
         r = client.post(url, json=body, headers=headers, timeout=20)
-    except (httpx.ConnectError, httpx.ReadError, httpx.RemoteProtocolError,
-            httpx.TimeoutException, ConnectionResetError, OSError) as ex:
+        if r.status_code == 401:
+            return None, "unauthorized"
+        if r.status_code != 200:
+            print(f"  [list] HTTP {r.status_code}: {r.text[:200]}")
+            return None, f"http_{r.status_code}"
+        data = r.json()
+    except Exception as ex:
         print(f"  [list] Connection error: {type(ex).__name__}: {ex}")
-        return None, f"connection_error"
-
-    if r.status_code == 401:
-        return None, "unauthorized"
-
-    if r.status_code != 200:
-        print(f"  [list] HTTP {r.status_code}: {r.text[:200]}")
-        return None, f"http_{r.status_code}"
-
-    data = r.json()
+        return None, "connection_error"
     if "data" not in data or "vendor_list" not in data["data"]:
         return None, "no_data"
 
@@ -192,15 +188,16 @@ def fetch_restaurant_detail(client, vendor_code, token, lat, lng):
     headers["apollographql-client-name"] = "android"
     headers["apollographql-client-version"] = "26.28.0"
 
-    r = client.get(url, params=params, headers=headers, timeout=20)
-
-    if r.status_code == 401:
-        return None, "unauthorized"
-
-    if r.status_code != 200:
-        return None, f"http_{r.status_code}"
-
-    data = r.json()
+    try:
+        r = client.get(url, params=params, headers=headers, timeout=20)
+        if r.status_code == 401:
+            return None, "unauthorized"
+        if r.status_code != 200:
+            return None, f"http_{r.status_code}"
+        data = r.json()
+    except Exception as ex:
+        print(f"  [detail] Connection error: {type(ex).__name__}: {ex}")
+        return None, "connection_error"
     rdp = data.get("data", {}).get("restaurantDetailsPage")
     if rdp:
         return rdp, "ok"
@@ -311,6 +308,8 @@ def parse_graphql_detail(data):
             rating_obj = prod.get("rating") or {}
             rating_pct = rating_obj.get("percentage", 0) if isinstance(rating_obj, dict) else 0
 
+            today_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            orig_val = old_price if old_price > 0 else selling_price
             menus[str(pid)] = {
                 "id": pid,
                 "name": title,
@@ -322,6 +321,7 @@ def parse_graphql_detail(data):
                 "isPopular": prod.get("isBundle", False),
                 "category": cat_name,
                 "rating": rating_pct,
+                "priceHistory": [{"date": today_str, "price": selling_price, "oldPrice": orig_val}],
             }
 
     return {
@@ -334,7 +334,18 @@ def parse_graphql_detail(data):
 
 
 def merge_detail(restaurant, detail):
-    """Merge detail data into restaurant."""
+    """Merge detail data into restaurant preserving daily price history."""
+    ex_menus, new_menus = restaurant.get("menus", {}), detail.get("menus", {})
+    if new_menus and ex_menus:
+        today_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        for pid, dish in new_menus.items():
+            if pid in ex_menus:
+                hist = list(ex_menus[pid].get("priceHistory", []))
+                orig_val = dish["oldPrice"] if dish.get("oldPrice", 0) > 0 else dish["price"]
+                entry = next((p for p in hist if p.get("date") == today_str), None)
+                if entry: entry.update({"price": dish["price"], "oldPrice": orig_val})
+                else: hist.append({"date": today_str, "price": dish["price"], "oldPrice": orig_val})
+                dish["priceHistory"] = hist
     for key in ("categories", "menus", "minOrderValue", "preparationTime", "workingHours"):
         val = detail.get(key)
         if val is not None and val != "" and val != [] and val != {}:
@@ -584,8 +595,7 @@ def main():
                                     print("  [auth] Could not refresh token")
                             break
                         break
-                    except (httpx.ReadError, httpx.ConnectError, httpx.RemoteProtocolError,
-                            ConnectionResetError, OSError) as ex:
+                    except Exception as ex:
                         if attempt < MAX_RETRIES - 1:
                             wait = (attempt + 1) * 2
                             print(f"  [retry] Connection error ({type(ex).__name__}), waiting {wait}s...")

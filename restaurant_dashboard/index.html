@@ -176,6 +176,10 @@
                     <span id="results-count" class="results-count">0 results</span>
                     <span id="results-context" class="results-context">Ready to explore</span>
                 </div>
+                <div class="toolbar-graph-toggles" id="toolbar-graph-toggles">
+                    <button class="tb-graph-btn active" data-graph-filter="ori" title="Toggle Original Price graph & dishes"><i class="fas fa-tag"></i> Ori Price</button>
+                    <button class="tb-graph-btn active" data-graph-filter="disc" title="Toggle Discounted Price graph & dishes"><i class="fas fa-percent"></i> Disc Price</button>
+                </div>
                 <div id="active-filter-chips" class="active-filter-chips"></div>
                 <button id="reset-filters-btn" class="reset-btn"><i class="fas fa-rotate-left"></i> Reset</button>
             </section>
@@ -295,6 +299,11 @@
             <div class="dish-history-body">
                 <section id="dish-tab-history" class="dish-tab-panel active">
                     <div id="dish-history-kpis" class="dish-history-kpis"></div>
+                    <div class="dish-chart-toggles" id="dish-chart-toggles">
+                        <button class="chart-toggle-btn active" data-key="ori" title="Toggle Original Price"><i class="fas fa-tag"></i> Original Price</button>
+                        <button class="chart-toggle-btn active" data-key="disc" title="Toggle Discounted Price"><i class="fas fa-percent"></i> Discounted Price</button>
+                        <button class="chart-toggle-btn active" data-key="mean" title="Toggle Average Price"><i class="fas fa-calculator"></i> Average</button>
+                    </div>
                     <div class="dish-chart-wrap"><canvas id="dish-history-chart"></canvas><div id="dish-history-empty" class="dish-history-empty" hidden></div></div>
                     <div class="dish-alert-actions">
                         <button id="alert-drop-btn" class="alert-action drop"><i class="fas fa-arrow-trend-down"></i><span>Alert on drop</span></button>

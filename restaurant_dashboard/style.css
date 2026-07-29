@@ -808,6 +808,15 @@ body[data-theme="light"] .price-intelligence input[type="date"] { color-scheme:l
 .history-kpi.down strong,.history-kpi.low strong { color:var(--success); }
 .history-kpi.up strong,.history-kpi.high strong { color:var(--danger); }
 .history-kpi.mean strong { color:var(--accent-secondary); }
+.dish-chart-toggles { display:flex; gap:8px; margin-bottom:8px; justify-content:flex-end; }
+.chart-toggle-btn { padding:5px 11px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-input); color:var(--text-muted); font-size:0.65rem; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s ease; opacity:0.6; }
+.chart-toggle-btn.active { opacity:1; }
+.chart-toggle-btn.active[data-key="ori"],.tb-graph-btn.active[data-graph-filter="ori"] { background:rgba(16,185,129,0.15); color:#10b981; border-color:#10b981; }
+.chart-toggle-btn.active[data-key="disc"],.tb-graph-btn.active[data-graph-filter="disc"] { background:rgba(236,72,153,0.15); color:var(--accent,#ec4899); border-color:var(--accent,#ec4899); }
+.chart-toggle-btn.active[data-key="mean"] { background:rgba(148,163,184,0.15); color:var(--text-secondary); border-color:var(--border-color); }
+.toolbar-graph-toggles { display:flex; gap:6px; align-items:center; margin:0 10px; }
+.tb-graph-btn { padding:5px 10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-input); color:var(--text-muted); font-size:0.65rem; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s ease; opacity:0.5; }
+.tb-graph-btn.active { opacity:1; }
 .dish-chart-wrap { flex:1; min-height:330px; border:1px solid var(--border-color); border-radius:16px; background:color-mix(in srgb,var(--card-solid) 76%,transparent); padding:12px; }
 .dish-chart-wrap canvas { width:100%!important; height:100%!important; }
 .dish-alert-actions { display:flex; gap:9px; padding-top:10px; }
@@ -950,6 +959,14 @@ html { scroll-behavior:auto; }
     margin:0;
     grid-template-columns:repeat(5,minmax(0,1fr));
     pointer-events:none;
+}
+#dish-tab-history .dish-chart-toggles {
+    position:absolute;
+    z-index:4;
+    top:72px;
+    right:14px;
+    margin:0;
+    pointer-events:auto;
 }
 .history-kpi { min-height:52px; padding:8px 10px; background:color-mix(in srgb,var(--card-solid) 55%,transparent); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); box-shadow:none; }
 .dish-alert-actions {
