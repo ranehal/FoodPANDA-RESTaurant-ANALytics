@@ -296,8 +296,16 @@ def parse_graphql_detail(data):
             pid = prod.get("id", "")
             title = prod.get("title", "")
             pa = prod.get("priceAttributes", {})
-            price = pa.get("originalPrice", 0)
-            discounted = pa.get("discountedPrice")
+            orig_price = float(pa.get("originalPrice", 0) or 0)
+            disc_price = float(pa.get("discountedPrice", 0) or 0) if pa.get("discountedPrice") else 0.0
+
+            if disc_price > 0 and disc_price < orig_price:
+                selling_price = disc_price
+                old_price = orig_price
+            else:
+                selling_price = orig_price
+                old_price = 0.0
+
             img_obj = prod.get("image", {})
             img_url = img_obj.get("url", "") if isinstance(img_obj, dict) else str(img_obj)
             rating_obj = prod.get("rating") or {}
@@ -306,8 +314,8 @@ def parse_graphql_detail(data):
             menus[str(pid)] = {
                 "id": pid,
                 "name": title,
-                "price": price,
-                "oldPrice": discounted if discounted else 0,
+                "price": selling_price,
+                "oldPrice": old_price,
                 "description": prod.get("description", ""),
                 "image": img_url,
                 "isAvailable": not prod.get("isSoldOut", False),

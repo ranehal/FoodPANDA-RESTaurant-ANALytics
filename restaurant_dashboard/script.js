@@ -237,6 +237,17 @@ function processData() {
                 dish._locationIdx = locationIndex;
                 dish._isFavorite = isFavorite('d', dish.id);
                 dish._restaurant = r;
+
+                let p1 = Number(dish.price || 0);
+                let p2 = Number(dish.oldPrice || 0);
+                if (p1 > 0 && p2 > 0 && p1 !== p2) {
+                    dish.price = Math.min(p1, p2);
+                    dish.oldPrice = Math.max(p1, p2);
+                } else {
+                    dish.price = p1;
+                    dish.oldPrice = p2 > p1 ? p2 : 0;
+                }
+
                 dish._discountPct = dish.oldPrice > dish.price && dish.oldPrice > 0 ? Math.round((1 - dish.price / dish.oldPrice) * 100) : 0;
                 dish._searchText = `${dish.name || ''} ${dish.restaurantName || ''} ${dish.category || ''} ${(r.cuisineList || []).join(' ')}`.toLowerCase();
                 sourceDish._resolvedId = dish.id;
@@ -288,7 +299,6 @@ function dateKey(date) {
 }
 function normalizeDishHistory(dish) {
     const raw = dish.priceHistory || dish.price_history || dish.history || dish.historicalPrices || dish.priceRecords || dish.historyData;
-    if (!raw) return { points: [], source: 'none' };
     const points = [];
     const addPoint = (dateValue, priceValue) => {
         const date = dateFrom(dateValue);
@@ -305,9 +315,15 @@ function normalizeDishHistory(dish) {
     } else if (raw && typeof raw === 'object') {
         Object.entries(raw).forEach(([date,value]) => addPoint(date, typeof value === 'object' ? (value.price || value.value || value.amount) : value));
     }
+    if (points.length === 0 && dish.oldPrice > dish.price && dish.oldPrice > 0) {
+        const today = new Date();
+        const prev = new Date(today.getTime() - 7 * 86400 * 1000);
+        points.push({ date: dateKey(prev), price: Number(dish.oldPrice) });
+        points.push({ date: dateKey(today), price: Number(dish.price) });
+    }
     const unique = new Map(points.map(point => [point.date, point]));
     const normalized = [...unique.values()].sort((a,b) => a.date.localeCompare(b.date));
-    return { points: normalized, source: normalized.length ? 'real' : 'none' };
+    return { points: normalized, source: normalized.length ? (raw ? 'real' : 'discount') : 'none' };
 }
 function getDishDisplayHistory(dish) {
     return Array.isArray(dish?._history) ? dish._history : [];
@@ -727,9 +743,22 @@ function renderSidebar() {
     const locRestaurants = restaurantsByLocation[currentLocation] || [];
     const cuisineCounts = {};
     locRestaurants.forEach(r => (r.cuisineList || []).forEach(c => cuisineCounts[c] = (cuisineCounts[c] || 0) + 1));
-    const matches = Object.entries(cuisineCounts)
-        .filter(([name]) => !searchQuery || name.toLowerCase().includes(searchQuery) || locRestaurants.some(r => r.name?.toLowerCase().includes(searchQuery) && r.cuisineList?.includes(name)))
-        .sort((a,b) => b[1] - a[1]);
+
+    let matches;
+    if (!searchQuery) {
+        matches = Object.entries(cuisineCounts).sort((a,b) => b[1] - a[1]);
+    } else {
+        const queryLower = searchQuery.toLowerCase();
+        const matchingCuisines = new Set();
+        locRestaurants.forEach(r => {
+            if (r._searchText && r._searchText.includes(queryLower)) {
+                (r.cuisineList || []).forEach(c => matchingCuisines.add(c));
+            }
+        });
+        matches = Object.entries(cuisineCounts)
+            .filter(([name]) => name.toLowerCase().includes(queryLower) || matchingCuisines.has(name))
+            .sort((a,b) => b[1] - a[1]);
+    }
 
     document.getElementById('cuisine-list').innerHTML = matches.length ? matches.map(([name,count]) => `
         <li class="cuisine-item ${activeCuisine === name ? 'active' : ''}" data-cuisine="${attr(name)}">
@@ -774,12 +803,18 @@ function animateValue(id, target, decimals = 0, instant = false) {
     requestAnimationFrame(step);
 }
 
+let cachedFilteredItems = null;
+
 function renderGrid() {
     if (currentView === 'analytics') return;
     const grid = document.getElementById('sh-grid');
     const signature = [currentView,currentLocation,searchQuery,activeCuisine,sortOption,activeIntelFilter,activePriceFilter,showFavoritesOnly,customDropPct,newDays,newRangeFrom,newRangeTo,meanDateFrom,meanDateTo].join('|');
-    if (signature !== lastRenderSignature) { visibleLimit = 60; lastRenderSignature = signature; }
-    const items = currentView === 'restaurants' ? getFilteredRestaurants() : getFilteredDishes();
+    if (signature !== lastRenderSignature || !cachedFilteredItems) {
+        visibleLimit = 60;
+        lastRenderSignature = signature;
+        cachedFilteredItems = currentView === 'restaurants' ? getFilteredRestaurants() : getFilteredDishes();
+    }
+    const items = cachedFilteredItems;
     filteredItems = items;
     grid.style.gridTemplateColumns = `repeat(${gridCols}, minmax(0,1fr))`;
     if (!items.length) {
