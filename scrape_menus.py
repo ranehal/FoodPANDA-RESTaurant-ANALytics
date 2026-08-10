@@ -12,6 +12,8 @@ import os
 import sys
 import argparse
 from datetime import datetime, timezone
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FILE = os.path.join(DATA_DIR, "restaurant_dashboard", "data.json")
@@ -96,6 +98,30 @@ def make_auth_headers(token):
 def make_client():
     """Create a fresh HTTP client."""
     return httpx.Client(http2=False, follow_redirects=True, timeout=30)
+
+
+_thread_local = threading.local()
+_refresh_lock = threading.Lock()
+
+
+def _thread_client():
+    """Get the per-thread httpx.Client, creating it lazily."""
+    client = getattr(_thread_local, "client", None)
+    if client is None:
+        client = make_client()
+        _thread_local.client = client
+    return client
+
+
+def _reset_thread_client():
+    """Close and drop the current thread's httpx.Client."""
+    client = getattr(_thread_local, "client", None)
+    if client is not None:
+        try:
+            client.close()
+        except Exception:
+            pass
+        _thread_local.client = None
 
 
 def fetch_restaurant_listing(client, token, lat, lng, offset=0, limit=PAGE_SIZE):
@@ -461,6 +487,69 @@ def save_parquet(locations, total_r, total_d, scraped_at):
     return False
 
 
+def _process_restaurant(rest, i, lat, lng, token_holder, loc_state):
+    """Fetch and merge menu detail for one restaurant inside a worker thread.
+
+    token_holder is a 1-element list holding the shared JWT (mutated only under
+    _refresh_lock, double-checked so only one thread refreshes at a time).
+    loc_state tracks auth failures for the current location.
+    """
+    code = rest["code"]
+    rname = rest.get("name", code)
+    detail = None
+
+    for attempt in range(MAX_RETRIES):
+        if loc_state["auth_fails"] > 5:
+            return {"index": i, "rname": rname, "ok": False, "failed": False,
+                    "skipped": True, "dish_count": 0}
+
+        token_now = token_holder[0]
+        try:
+            detail, dstatus = fetch_restaurant_detail(_thread_client(), code, token_now, lat, lng)
+        except Exception as ex:
+            if attempt < MAX_RETRIES - 1:
+                wait = (attempt + 1) * 2
+                print(f"  [retry] Connection error ({type(ex).__name__}), waiting {wait}s...")
+                _reset_thread_client()
+                time.sleep(wait)
+                continue
+            print(f"  [ERROR] {rname}: {type(ex).__name__}: {ex}")
+            detail = None
+            break
+
+        if dstatus == "unauthorized":
+            with _refresh_lock:
+                if token_holder[0] == token_now:
+                    if loc_state["auth_fails"] < 3:
+                        loc_state["auth_fails"] += 1
+                        print(f"  [auth] Token expired, refreshing (attempt {attempt+1})...")
+                        new_token = fetch_fresh_token()
+                        if new_token:
+                            token_holder[0] = new_token
+                            _reset_thread_client()
+                            print("  [auth] Token refreshed, retrying...")
+                        else:
+                            loc_state["auth_fails"] += 3
+                            print("  [auth] Could not refresh token")
+                    else:
+                        loc_state["auth_fails"] += 3
+            if token_holder[0] == token_now:
+                detail = None
+                break
+            continue
+        break
+
+    time.sleep(REQUEST_DELAY)
+
+    if detail:
+        parsed = parse_graphql_detail(detail)
+        merge_detail(rest, parsed)
+        return {"index": i, "rname": rname, "ok": True, "failed": False,
+                "skipped": False, "dish_count": len(parsed.get("menus", {}))}
+    return {"index": i, "rname": rname, "ok": False, "failed": True,
+            "skipped": False, "dish_count": 0}
+
+
 def main():
     parser = argparse.ArgumentParser(description="FoodPANDA Live Scraper")
     parser.add_argument("--token", help="JWT Bearer token")
@@ -566,77 +655,48 @@ def main():
 
         scraped = 0
         failed = 0
-        auth_fails_this_loc = 0
 
         if not args.skip_details:
-            for i, rest in enumerate(restaurants):
-                code = rest["code"]
-                rname = rest.get("name", code)
-
-                detail = None
-                for attempt in range(MAX_RETRIES):
+            loc_state = {"auth_fails": 0}
+            token_holder = [token]
+            with ThreadPoolExecutor(max_workers=5) as pool:
+                futures = [
+                    pool.submit(_process_restaurant, rest, i, lat, lng, token_holder, loc_state)
+                    for i, rest in enumerate(restaurants)
+                ]
+                completed = 0
+                for fut in as_completed(futures):
                     try:
-                        detail, dstatus = fetch_restaurant_detail(client, code, token, lat, lng)
-                        if dstatus == "unauthorized":
-                            auth_fails_this_loc += 1
-                            if auth_fails_this_loc <= 3:
-                                print(f"  [auth] Token expired, refreshing (attempt {attempt+1})...")
-                                new_token = fetch_fresh_token()
-                                if new_token:
-                                    token = new_token
-                                    try:
-                                        client.close()
-                                    except Exception:
-                                        pass
-                                    client = make_client()
-                                    print("  [auth] Token refreshed, retrying...")
-                                    continue
-                                else:
-                                    print("  [auth] Could not refresh token")
-                            break
-                        break
+                        res = fut.result()
                     except Exception as ex:
-                        if attempt < MAX_RETRIES - 1:
-                            wait = (attempt + 1) * 2
-                            print(f"  [retry] Connection error ({type(ex).__name__}), waiting {wait}s...")
-                            try:
-                                client.close()
-                            except Exception:
-                                pass
-                            client = make_client()
-                            time.sleep(wait)
+                        print(f"  [ERROR] Unexpected worker failure ({type(ex).__name__}): {ex}")
+                        failed += 1
+                        continue
+                    if res["skipped"]:
+                        continue
+                    i = res["index"]
+                    completed += 1
+                    if res["ok"]:
+                        scraped += 1
+                        consecutive_auth_fails = 0
+                        if res["dish_count"] > 0:
+                            print(f"  [{i+1}/{len(restaurants)}] {res['rname']}: {res['dish_count']} dishes")
                         else:
-                            print(f"  [ERROR] {rname}: {type(ex).__name__}: {ex}")
-                            detail = None
-                            break
-
-                if detail:
-                    parsed = parse_graphql_detail(detail)
-                    merge_detail(rest, parsed)
-                    dish_count = len(parsed.get("menus", {}))
-                    scraped += 1
-                    consecutive_auth_fails = 0
-                    if dish_count > 0:
-                        print(f"  [{i+1}/{len(restaurants)}] {rname}: {dish_count} dishes")
+                            print(f"  [{i+1}/{len(restaurants)}] {res['rname']}: no menu data")
                     else:
-                        print(f"  [{i+1}/{len(restaurants)}] {rname}: no menu data")
-                else:
-                    failed += 1
-                    if auth_fails_this_loc > 3:
-                        if failed <= 3 or failed % 20 == 0:
-                            print(f"  [{i+1}/{len(restaurants)}] {rname}: FAIL (token expired, skipping rest)")
-                        if auth_fails_this_loc > 5:
-                            break
-                    else:
-                        print(f"  [{i+1}/{len(restaurants)}] {rname}: FAIL")
+                        failed += 1
+                        if loc_state["auth_fails"] > 3:
+                            if failed <= 3 or failed % 20 == 0:
+                                print(f"  [{i+1}/{len(restaurants)}] {res['rname']}: FAIL (token expired, skipping rest)")
+                        else:
+                            print(f"  [{i+1}/{len(restaurants)}] {res['rname']}: FAIL")
 
-                time.sleep(REQUEST_DELAY)
-
-                if (i + 1) % 30 == 0:
-                    restaurants.sort(key=lambda r: r.get("distance") or 9999)
-                    _loc = {"name": name, "lat": lat, "lng": lng, "restaurants": restaurants}
-                    _locs = [l for l in output_locations if l["name"] != name] + [_loc]
-                    save_output(_locs)
+                    if completed % 30 == 0:
+                        restaurants.sort(key=lambda r: r.get("distance") or 9999)
+                        _loc = {"name": name, "lat": lat, "lng": lng, "restaurants": restaurants}
+                        _locs = [l for l in output_locations if l["name"] != name] + [_loc]
+                        save_output(_locs)
+            token = token_holder[0]
 
         loc_dishes = sum(len(r.get("menus", {})) for r in restaurants)
         total_restaurants += len(restaurants)
