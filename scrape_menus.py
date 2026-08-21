@@ -379,21 +379,37 @@ def merge_detail(restaurant, detail):
 
 
 def save_output(locations):
+    if not locations or sum(len(l["restaurants"]) for l in locations) == 0:
+        print("  [WARN] 0 restaurants scraped. Keeping existing dataset to prevent data loss.")
+        return 0, 0
+
     total_r = sum(len(loc["restaurants"]) for loc in locations)
     total_d = sum(
         len(r.get("menus", {}))
         for loc in locations
         for r in loc["restaurants"]
     )
+    now_iso = datetime.now(timezone.utc).isoformat()
+    today_str = datetime.now().strftime("%Y-%m-%d")
+
     output = {
         "locations": locations,
         "totalRestaurants": total_r,
         "totalDishes": total_d,
-        "scrapedAt": datetime.now(timezone.utc).isoformat(),
+        "scrapedAt": now_iso,
     }
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
     save_parquet(locations, total_r, total_d, output["scrapedAt"])
+
+    # Save daily history snapshot
+    hist_dir = os.path.join(DATA_DIR, "history")
+    os.makedirs(hist_dir, exist_ok=True)
+    snapshot_file = os.path.join(hist_dir, f"foodpanda_restaurants_{today_str}.json")
+    with open(snapshot_file, "w", encoding="utf-8") as f:
+        json.dump(output, f, ensure_ascii=False)
+    print(f"  [snapshot] Saved daily history: {snapshot_file}")
+
     return total_r, total_d
 
 
