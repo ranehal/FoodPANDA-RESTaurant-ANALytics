@@ -378,37 +378,95 @@ def merge_detail(restaurant, detail):
             restaurant[key] = val
 
 
-def save_output(locations):
+def merge_dish_histories(new_locations, now_iso, today_str):
+    existing_dish_hist = {}
+    if os.path.exists(DATA_FILE):
+        try:
+            with open(DATA_FILE, "r", encoding="utf-8") as f:
+                old_data = json.load(f)
+                for loc in old_data.get("locations", []):
+                    for rest in loc.get("restaurants", []):
+                        rid = str(rest.get("id") or rest.get("code") or "")
+                        for did, menu in rest.get("menus", {}).items():
+                            key = f"{rid}:{did}"
+                            hist = menu.get("priceHistory") or menu.get("price_history") or menu.get("history") or []
+                            if isinstance(hist, list):
+                                existing_dish_hist[key] = [h for h in hist if isinstance(h, dict)]
+        except Exception as e:
+            print(f"  [WARN] Failed to load previous dish history: {e}")
+
+    for loc in new_locations:
+        for rest in loc.get("restaurants", []):
+            rid = str(rest.get("id") or rest.get("code") or "")
+            for did, menu in rest.get("menus", {}).items():
+                key = f"{rid}:{did}"
+                hist = list(existing_dish_hist.get(key, []))
+                try:
+                    curr_price = float(menu.get("price", 0))
+                except (ValueError, TypeError):
+                    curr_price = 0
+                try:
+                    old_price = float(menu.get("oldPrice", curr_price) or curr_price)
+                except (ValueError, TypeError):
+                    old_price = curr_price
+
+                # Remove any existing entry for today and append latest
+                hist = [h for h in hist if h.get("date") != today_str and str(h.get("date"))[:10] != today_str]
+                orig_val = old_price if old_price > 0 else curr_price
+                if curr_price > 0:
+                    hist.append({
+                        "date": today_str,
+                        "timestamp": now_iso,
+                        "price": curr_price,
+                        "oldPrice": orig_val
+                    })
+                menu["priceHistory"] = hist
+
+    return new_locations
+
+
+_save_lock = threading.Lock()
+
+
+def save_output(locations, is_final=False):
     if not locations or sum(len(l["restaurants"]) for l in locations) == 0:
         print("  [WARN] 0 restaurants scraped. Keeping existing dataset to prevent data loss.")
         return 0, 0
 
-    total_r = sum(len(loc["restaurants"]) for loc in locations)
-    total_d = sum(
-        len(r.get("menus", {}))
-        for loc in locations
-        for r in loc["restaurants"]
-    )
     now_iso = datetime.now(timezone.utc).isoformat()
     today_str = datetime.now().strftime("%Y-%m-%d")
 
+    if is_final:
+        merged_locations = merge_dish_histories(locations, now_iso, today_str)
+    else:
+        merged_locations = locations
+
+    total_r = sum(len(loc["restaurants"]) for loc in merged_locations)
+    total_d = sum(
+        len(r.get("menus", {}))
+        for loc in merged_locations
+        for r in loc["restaurants"]
+    )
+
     output = {
-        "locations": locations,
+        "locations": merged_locations,
         "totalRestaurants": total_r,
         "totalDishes": total_d,
         "scrapedAt": now_iso,
     }
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
-    save_parquet(locations, total_r, total_d, output["scrapedAt"])
+    with _save_lock:
+        with open(DATA_FILE, "w", encoding="utf-8") as f:
+            json.dump(output, f, ensure_ascii=False, indent=2)
+        save_parquet(merged_locations, total_r, total_d, output["scrapedAt"])
 
-    # Save daily history snapshot
-    hist_dir = os.path.join(DATA_DIR, "history")
-    os.makedirs(hist_dir, exist_ok=True)
-    snapshot_file = os.path.join(hist_dir, f"foodpanda_restaurants_{today_str}.json")
-    with open(snapshot_file, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False)
-    print(f"  [snapshot] Saved daily history: {snapshot_file}")
+        # Save daily history snapshot
+        if is_final and total_d > 0:
+            hist_dir = os.path.join(DATA_DIR, "history")
+            os.makedirs(hist_dir, exist_ok=True)
+            snapshot_file = os.path.join(hist_dir, f"foodpanda_restaurants_{today_str}.json")
+            with open(snapshot_file, "w", encoding="utf-8") as f:
+                json.dump(output, f, ensure_ascii=False)
+            print(f"  [snapshot] Saved daily history: {snapshot_file}")
 
     return total_r, total_d
 
@@ -733,15 +791,18 @@ def main():
     except Exception:
         pass
 
-    total_r, total_d = save_output(output_locations)
+    total_r, total_d = save_output(output_locations, is_final=True)
 
     print(f"\n{'=' * 60}")
     print(f"  DONE")
-    print(f"  Restaurants: {total_r}")
-    print(f"  Dishes:      {total_d}")
+    print(f"  Restaurants:    {total_r}")
+    print(f"  Dishes:         {total_d}")
+    print(f"  Total Dishes:   {total_d}")
+    print(f"  Total Products: {total_d}")
+    print(f"  Scraped {total_d} products")
     for label, path in [("JSON", DATA_FILE), ("Parquet", PARQUET_FILE)]:
         if os.path.exists(path):
-            print(f"  {label}:       {path} ({os.path.getsize(path) / 1024:.0f} KB)")
+            print(f"  {label}:          {path} ({os.path.getsize(path) / 1024:.0f} KB)")
     print(f"{'=' * 60}")
 
 
