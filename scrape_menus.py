@@ -378,22 +378,78 @@ def merge_detail(restaurant, detail):
             restaurant[key] = val
 
 
-def merge_dish_histories(new_locations, now_iso, today_str):
+def load_all_existing_history():
+    """Load historical price records across all previous history snapshot JSONs and data.json."""
+    import glob
     existing_dish_hist = {}
-    if os.path.exists(DATA_FILE):
-        try:
-            with open(DATA_FILE, "r", encoding="utf-8") as f:
-                old_data = json.load(f)
-                for loc in old_data.get("locations", []):
+
+    # 1. Load from all history snapshot files
+    hist_dir = os.path.join(DATA_DIR, "history")
+    if os.path.exists(hist_dir):
+        for f in sorted(glob.glob(os.path.join(hist_dir, "*.json"))):
+            try:
+                fname = os.path.basename(f)
+                date_part = fname.replace(".json", "").split("_")[-1]
+                with open(f, "r", encoding="utf-8") as fh:
+                    h_data = json.load(fh)
+                for loc in h_data.get("locations", []):
                     for rest in loc.get("restaurants", []):
                         rid = str(rest.get("id") or rest.get("code") or "")
                         for did, menu in rest.get("menus", {}).items():
                             key = f"{rid}:{did}"
-                            hist = menu.get("priceHistory") or menu.get("price_history") or menu.get("history") or []
-                            if isinstance(hist, list):
-                                existing_dish_hist[key] = [h for h in hist if isinstance(h, dict)]
+                            p_hist = menu.get("priceHistory") or menu.get("price_history") or menu.get("history") or []
+                            if isinstance(p_hist, list) and p_hist:
+                                for entry in p_hist:
+                                    if isinstance(entry, dict) and entry.get("date"):
+                                        if key not in existing_dish_hist:
+                                            existing_dish_hist[key] = []
+                                        if not any(h.get("date") == entry.get("date") for h in existing_dish_hist[key]):
+                                            existing_dish_hist[key].append(entry)
+                            else:
+                                try: p = float(menu.get("price", 0))
+                                except: p = 0
+                                if p > 0:
+                                    if key not in existing_dish_hist:
+                                        existing_dish_hist[key] = []
+                                    if not any(h.get("date") == date_part for h in existing_dish_hist[key]):
+                                        existing_dish_hist[key].append({
+                                            "date": date_part,
+                                            "price": p,
+                                            "oldPrice": float(menu.get("oldPrice", p) or p)
+                                        })
+            except Exception:
+                pass
+
+    # 2. Also load from current DATA_FILE if available
+    if os.path.exists(DATA_FILE):
+        try:
+            with open(DATA_FILE, "r", encoding="utf-8") as f:
+                old_data = json.load(f)
+            for loc in old_data.get("locations", []):
+                for rest in loc.get("restaurants", []):
+                    rid = str(rest.get("id") or rest.get("code") or "")
+                    for did, menu in rest.get("menus", {}).items():
+                        key = f"{rid}:{did}"
+                        p_hist = menu.get("priceHistory") or menu.get("price_history") or menu.get("history") or []
+                        if isinstance(p_hist, list):
+                            for entry in p_hist:
+                                if isinstance(entry, dict) and entry.get("date"):
+                                    if key not in existing_dish_hist:
+                                        existing_dish_hist[key] = []
+                                    if not any(h.get("date") == entry.get("date") for h in existing_dish_hist[key]):
+                                        existing_dish_hist[key].append(entry)
         except Exception as e:
             print(f"  [WARN] Failed to load previous dish history: {e}")
+
+    for key in existing_dish_hist:
+        existing_dish_hist[key].sort(key=lambda x: str(x.get("date", "")))
+
+    return existing_dish_hist
+
+
+def merge_dish_histories(new_locations, now_iso, today_str, existing_dish_hist=None):
+    if existing_dish_hist is None:
+        existing_dish_hist = load_all_existing_history()
 
     for loc in new_locations:
         for rest in loc.get("restaurants", []):
@@ -428,7 +484,7 @@ def merge_dish_histories(new_locations, now_iso, today_str):
 _save_lock = threading.Lock()
 
 
-def save_output(locations, is_final=False):
+def save_output(locations, is_final=False, existing_dish_hist=None):
     if not locations or sum(len(l["restaurants"]) for l in locations) == 0:
         print("  [WARN] 0 restaurants scraped. Keeping existing dataset to prevent data loss.")
         return 0, 0
@@ -436,10 +492,7 @@ def save_output(locations, is_final=False):
     now_iso = datetime.now(timezone.utc).isoformat()
     today_str = datetime.now().strftime("%Y-%m-%d")
 
-    if is_final:
-        merged_locations = merge_dish_histories(locations, now_iso, today_str)
-    else:
-        merged_locations = locations
+    merged_locations = merge_dish_histories(locations, now_iso, today_str, existing_dish_hist)
 
     total_r = sum(len(loc["restaurants"]) for loc in merged_locations)
     total_d = sum(
@@ -647,6 +700,10 @@ def main():
             print("  [auth] WARNING: Could not fetch token")
             token = ""
 
+    # Load multi-day history upfront so it is never lost during intermediate saves
+    existing_dish_hist = load_all_existing_history()
+    print(f"  [history] Loaded historical price trends for {len(existing_dish_hist)} dishes")
+
     client = make_client()
     consecutive_auth_fails = 0
     output_locations = []
@@ -769,7 +826,7 @@ def main():
                         restaurants.sort(key=lambda r: r.get("distance") or 9999)
                         _loc = {"name": name, "lat": lat, "lng": lng, "restaurants": restaurants}
                         _locs = [l for l in output_locations if l["name"] != name] + [_loc]
-                        save_output(_locs)
+                        save_output(_locs, is_final=False, existing_dish_hist=existing_dish_hist)
             token = token_holder[0]
 
         loc_dishes = sum(len(r.get("menus", {})) for r in restaurants)
@@ -791,7 +848,7 @@ def main():
     except Exception:
         pass
 
-    total_r, total_d = save_output(output_locations, is_final=True)
+    total_r, total_d = save_output(output_locations, is_final=True, existing_dish_hist=existing_dish_hist)
 
     print(f"\n{'=' * 60}")
     print(f"  DONE")
