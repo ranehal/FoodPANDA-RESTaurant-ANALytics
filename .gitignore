@@ -2,6 +2,7 @@
 foodpanda_26.28.0.apk
 *.apk
 *.har
+*.part*
 
 # Python
 __pycache__/
