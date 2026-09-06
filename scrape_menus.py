@@ -49,7 +49,7 @@ LOCATIONS = [
 ]
 
 PAGE_SIZE = 40
-REQUEST_DELAY = 0.5
+REQUEST_DELAY = 0.1
 MAX_RETRIES = 3
 
 GRAPHQL_HASH = "e54e2da1664dea317275ce6c580b6a38b06b6a2bdf446fa1be878652a4883063"
@@ -509,17 +509,18 @@ def save_output(locations, is_final=False, existing_dish_hist=None):
     }
     with _save_lock:
         with open(DATA_FILE, "w", encoding="utf-8") as f:
-            json.dump(output, f, ensure_ascii=False, indent=2)
-        save_parquet(merged_locations, total_r, total_d, output["scrapedAt"])
+            json.dump(output, f, ensure_ascii=False, separators=(',', ':'))
 
-        # Save daily history snapshot
-        if is_final and total_d > 0:
-            hist_dir = os.path.join(DATA_DIR, "history")
-            os.makedirs(hist_dir, exist_ok=True)
-            snapshot_file = os.path.join(hist_dir, f"foodpanda_restaurants_{today_str}.json")
-            with open(snapshot_file, "w", encoding="utf-8") as f:
-                json.dump(output, f, ensure_ascii=False)
-            print(f"  [snapshot] Saved daily history: {snapshot_file}")
+        # Only build parquet and history snapshot on final save to prevent massive intermediate disk latency
+        if is_final:
+            save_parquet(merged_locations, total_r, total_d, output["scrapedAt"])
+            if total_d > 0:
+                hist_dir = os.path.join(DATA_DIR, "history")
+                os.makedirs(hist_dir, exist_ok=True)
+                snapshot_file = os.path.join(hist_dir, f"foodpanda_restaurants_{today_str}.json")
+                with open(snapshot_file, "w", encoding="utf-8") as f:
+                    json.dump(output, f, ensure_ascii=False, separators=(',', ':'))
+                print(f"  [snapshot] Saved daily history: {snapshot_file}")
 
     return total_r, total_d
 
@@ -605,7 +606,7 @@ def save_parquet(locations, total_r, total_d, scraped_at):
         return False
 
     table = pa.Table.from_pylist(rows)
-    pq.write_table(table, PARQUET_FILE, compression="zstd", compression_level=19)
+    pq.write_table(table, PARQUET_FILE, compression="zstd", compression_level=12)
 
     if os.path.exists(PARQUET_FILE):
         json_size = os.path.getsize(DATA_FILE) / 1024
@@ -616,21 +617,31 @@ def save_parquet(locations, total_r, total_d, scraped_at):
     return False
 
 
-def _process_restaurant(rest, i, lat, lng, token_holder, loc_state):
+def _process_restaurant(rest, i, lat, lng, token_holder, loc_state, shared_cache=None):
     """Fetch and merge menu detail for one restaurant inside a worker thread.
 
     token_holder is a 1-element list holding the shared JWT (mutated only under
     _refresh_lock, double-checked so only one thread refreshes at a time).
     loc_state tracks auth failures for the current location.
+    shared_cache caches parsed menu details by restaurant code across overlapping locations.
     """
     code = rest["code"]
     rname = rest.get("name", code)
+
+    # Check cross-location cache first (prevents re-fetching restaurants across overlapping zones)
+    if shared_cache is not None and code and code in shared_cache:
+        cached_detail = shared_cache[code]
+        if cached_detail:
+            merge_detail(rest, cached_detail)
+            return {"index": i, "rname": rname, "ok": True, "failed": False,
+                    "skipped": False, "cached": True, "dish_count": len(cached_detail.get("menus", {}))}
+
     detail = None
 
     for attempt in range(MAX_RETRIES):
         if loc_state["auth_fails"] > 5:
             return {"index": i, "rname": rname, "ok": False, "failed": False,
-                    "skipped": True, "dish_count": 0}
+                    "skipped": True, "cached": False, "dish_count": 0}
 
         token_now = token_holder[0]
         try:
@@ -672,11 +683,13 @@ def _process_restaurant(rest, i, lat, lng, token_holder, loc_state):
 
     if detail:
         parsed = parse_graphql_detail(detail)
+        if shared_cache is not None and code:
+            shared_cache[code] = parsed
         merge_detail(rest, parsed)
         return {"index": i, "rname": rname, "ok": True, "failed": False,
-                "skipped": False, "dish_count": len(parsed.get("menus", {}))}
+                "skipped": False, "cached": False, "dish_count": len(parsed.get("menus", {}))}
     return {"index": i, "rname": rname, "ok": False, "failed": True,
-            "skipped": False, "dish_count": 0}
+            "skipped": False, "cached": False, "dish_count": 0}
 
 
 def main():
@@ -708,147 +721,149 @@ def main():
 
     client = make_client()
     consecutive_auth_fails = 0
+    shared_menu_cache = {}
     output_locations = []
     total_restaurants = 0
     total_dishes = 0
 
-    for loc in LOCATIONS:
-        lat, lng = loc["lat"], loc["lng"]
-        name = loc["name"]
-        print(f"\n--- {name} (lat={lat}, lng={lng}) ---")
-
-        all_vendors = []
-        offset = 0
-
-        while True:
-            print(f"  [list] Fetching offset={offset}...")
-
-            result, status = None, None
-            for list_attempt in range(MAX_RETRIES):
-                result, status = fetch_restaurant_listing(client, token, lat, lng, offset)
-                if status not in ("connection_error",):
-                    break
-                if list_attempt < MAX_RETRIES - 1:
-                    wait = (list_attempt + 1) * 5
-                    print(f"  [retry] Connection error, retrying in {wait}s (attempt {list_attempt+2}/{MAX_RETRIES})...")
-                    try:
-                        client.close()
-                    except Exception:
-                        pass
-                    client = make_client()
-                    time.sleep(wait)
-
-            if status == "unauthorized":
-                print("  [auth] Token expired during listing, refreshing...")
-                new_token = fetch_fresh_token()
-                if new_token:
-                    token = new_token
-                    print("  [auth] Refreshed token, retrying...")
-                    result, status = fetch_restaurant_listing(client, token, lat, lng, offset)
-                    if status == "connection_error":
-                        print(f"  [retry] Connection error after token refresh, skipping location")
-                        break
-                if status != "ok":
-                    print(f"  [list] Failed after refresh: {status}")
-                    break
-
-            if status != "ok" or not result:
-                print(f"  [list] Failed: {status}")
-                break
-
-            items = result["items"]
-            total_available = result["total"]
-            all_vendors.extend(items)
-
-            print(f"  [list] Got {len(items)} restaurants ({len(all_vendors)}/{total_available} total)")
-
-            if len(all_vendors) >= total_available or len(items) == 0:
-                break
-
-            if args.limit > 0 and len(all_vendors) >= args.limit * 2:
-                break
-
-            offset += PAGE_SIZE
-            time.sleep(REQUEST_DELAY)
-
-        if not all_vendors:
-            print(f"  [SKIP] No restaurants found for {name}")
-            continue
-
-        restaurants = [parse_vendor_list_item(v) for v in all_vendors]
-
-        if args.limit > 0:
-            restaurants = restaurants[:args.limit]
-            print(f"\n  [limit] Trimmed to {len(restaurants)} restaurants")
-
-        if args.skip_details:
-            print(f"  [skip-details] Skipping menu fetch")
-        else:
-            print(f"\n  [detail] Fetching menus for {len(restaurants)} restaurants...")
-
-        scraped = 0
-        failed = 0
-
-        if not args.skip_details:
-            loc_state = {"auth_fails": 0}
-            token_holder = [token]
-            with ThreadPoolExecutor(max_workers=5) as pool:
-                futures = [
-                    pool.submit(_process_restaurant, rest, i, lat, lng, token_holder, loc_state)
-                    for i, rest in enumerate(restaurants)
-                ]
-                completed = 0
-                for fut in as_completed(futures):
-                    try:
-                        res = fut.result()
-                    except Exception as ex:
-                        print(f"  [ERROR] Unexpected worker failure ({type(ex).__name__}): {ex}")
-                        failed += 1
-                        continue
-                    if res["skipped"]:
-                        continue
-                    i = res["index"]
-                    completed += 1
-                    if res["ok"]:
-                        scraped += 1
-                        consecutive_auth_fails = 0
-                        if res["dish_count"] > 0:
-                            print(f"  [{i+1}/{len(restaurants)}] {res['rname']}: {res['dish_count']} dishes")
-                        else:
-                            print(f"  [{i+1}/{len(restaurants)}] {res['rname']}: no menu data")
-                    else:
-                        failed += 1
-                        if loc_state["auth_fails"] > 3:
-                            if failed <= 3 or failed % 20 == 0:
-                                print(f"  [{i+1}/{len(restaurants)}] {res['rname']}: FAIL (token expired, skipping rest)")
-                        else:
-                            print(f"  [{i+1}/{len(restaurants)}] {res['rname']}: FAIL")
-
-                    if completed % 30 == 0:
-                        restaurants.sort(key=lambda r: r.get("distance") or 9999)
-                        _loc = {"name": name, "lat": lat, "lng": lng, "restaurants": restaurants}
-                        _locs = [l for l in output_locations if l["name"] != name] + [_loc]
-                        save_output(_locs, is_final=False, existing_dish_hist=existing_dish_hist)
-            token = token_holder[0]
-
-        loc_dishes = sum(len(r.get("menus", {})) for r in restaurants)
-        total_restaurants += len(restaurants)
-        total_dishes += loc_dishes
-
-        restaurants.sort(key=lambda r: r.get("distance") or 9999)
-        output_locations.append({
-            "name": name,
-            "lat": lat,
-            "lng": lng,
-            "restaurants": restaurants,
-        })
-
-        print(f"\n  {name} summary: {len(restaurants)} restaurants, {loc_dishes} dishes ({scraped} ok, {failed} failed)")
-
     try:
-        client.close()
-    except Exception:
-        pass
+        for loc in LOCATIONS:
+            lat, lng = loc["lat"], loc["lng"]
+            name = loc["name"]
+            print(f"\n--- {name} (lat={lat}, lng={lng}) ---")
+
+            all_vendors = []
+            offset = 0
+
+            while True:
+                print(f"  [list] Fetching offset={offset}...")
+
+                result, status = None, None
+                for list_attempt in range(MAX_RETRIES):
+                    result, status = fetch_restaurant_listing(client, token, lat, lng, offset)
+                    if status not in ("connection_error",):
+                        break
+                    if list_attempt < MAX_RETRIES - 1:
+                        wait = (list_attempt + 1) * 5
+                        print(f"  [retry] Connection error, retrying in {wait}s (attempt {list_attempt+2}/{MAX_RETRIES})...")
+                        try:
+                            client.close()
+                        except Exception:
+                            pass
+                        client = make_client()
+                        time.sleep(wait)
+
+                if status == "unauthorized":
+                    print("  [auth] Token expired during listing, refreshing...")
+                    new_token = fetch_fresh_token()
+                    if new_token:
+                        token = new_token
+                        print("  [auth] Refreshed token, retrying...")
+                        result, status = fetch_restaurant_listing(client, token, lat, lng, offset)
+                        if status == "connection_error":
+                            print(f"  [retry] Connection error after token refresh, skipping location")
+                            break
+                    if status != "ok":
+                        print(f"  [list] Failed after refresh: {status}")
+                        break
+
+                if status != "ok" or not result:
+                    print(f"  [list] Failed: {status}")
+                    break
+
+                items = result["items"]
+                total_available = result["total"]
+                all_vendors.extend(items)
+
+                print(f"  [list] Got {len(items)} restaurants ({len(all_vendors)}/{total_available} total)")
+
+                if len(all_vendors) >= total_available or len(items) == 0:
+                    break
+
+                if args.limit > 0 and len(all_vendors) >= args.limit * 2:
+                    break
+
+                offset += PAGE_SIZE
+                time.sleep(REQUEST_DELAY)
+
+            if not all_vendors:
+                print(f"  [SKIP] No restaurants found for {name}")
+                continue
+
+            restaurants = [parse_vendor_list_item(v) for v in all_vendors]
+
+            if args.limit > 0:
+                restaurants = restaurants[:args.limit]
+                print(f"\n  [limit] Trimmed to {len(restaurants)} restaurants")
+
+            if args.skip_details:
+                print(f"  [skip-details] Skipping menu fetch")
+            else:
+                print(f"\n  [detail] Fetching menus for {len(restaurants)} restaurants (10 workers)...")
+
+            scraped = 0
+            failed = 0
+
+            if not args.skip_details:
+                loc_state = {"auth_fails": 0}
+                token_holder = [token]
+                with ThreadPoolExecutor(max_workers=10) as pool:
+                    futures = [
+                        pool.submit(_process_restaurant, rest, i, lat, lng, token_holder, loc_state, shared_menu_cache)
+                        for i, rest in enumerate(restaurants)
+                    ]
+                    completed = 0
+                    for fut in as_completed(futures):
+                        try:
+                            res = fut.result()
+                        except Exception as ex:
+                            print(f"  [ERROR] Unexpected worker failure ({type(ex).__name__}): {ex}")
+                            failed += 1
+                            continue
+                        if res["skipped"]:
+                            continue
+                        i = res["index"]
+                        completed += 1
+                        if res["ok"]:
+                            scraped += 1
+                            consecutive_auth_fails = 0
+                            c_tag = " (cached)" if res.get("cached") else ""
+                            if res["dish_count"] > 0:
+                                print(f"  [{i+1}/{len(restaurants)}] {res['rname']}: {res['dish_count']} dishes{c_tag}")
+                            else:
+                                print(f"  [{i+1}/{len(restaurants)}] {res['rname']}: no menu data{c_tag}")
+                        else:
+                            failed += 1
+                            if loc_state["auth_fails"] > 3:
+                                if failed <= 3 or failed % 20 == 0:
+                                    print(f"  [{i+1}/{len(restaurants)}] {res['rname']}: FAIL (token expired, skipping rest)")
+                            else:
+                                print(f"  [{i+1}/{len(restaurants)}] {res['rname']}: FAIL")
+
+                token = token_holder[0]
+
+            loc_dishes = sum(len(r.get("menus", {})) for r in restaurants)
+            total_restaurants += len(restaurants)
+            total_dishes += loc_dishes
+
+            restaurants.sort(key=lambda r: r.get("distance") or 9999)
+            output_locations.append({
+                "name": name,
+                "lat": lat,
+                "lng": lng,
+                "restaurants": restaurants,
+            })
+
+            print(f"\n  {name} summary: {len(restaurants)} restaurants, {loc_dishes} dishes ({scraped} ok, {failed} failed)")
+
+            # Fast compact checkpoint after completing each location (no blocking parquet level 19)
+            save_output(output_locations, is_final=False, existing_dish_hist=existing_dish_hist)
+
+    finally:
+        try:
+            client.close()
+        except Exception:
+            pass
 
     total_r, total_d = save_output(output_locations, is_final=True, existing_dish_hist=existing_dish_hist)
 
