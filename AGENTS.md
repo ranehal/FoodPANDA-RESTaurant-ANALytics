@@ -23,6 +23,8 @@
   - **Mandatory Headers**: `perseus-client-id`, `perseus-session-id`, `customer-latitude`, `customer-longitude`, `x-fp-api-key: android`, `authorization: Bearer {token}`.
 
 ## Daily History & Dataset
-- `history/foodpanda_restaurants_YYYY-MM-DD.json`: Complete daily snapshots.
+- `history/foodpanda_restaurants_YYYY-MM-DD.json`: Complete daily snapshots across 34 continuous dates (`2026-07-27` to `2026-08-31`).
 - `scrape_menus.py`'s `load_all_existing_history()` reads all files in `history/` to build multi-day price trajectories into `priceHistory: [{date, price, oldPrice}]` for every dish.
-- `save_parquet()` serializes normalized flat records into `restaurant_dashboard/data.parquet`.
+- `rebuild_full_history.py`: Standalone utility to compile all snapshots in `history/` and emit synchronized `restaurant_dashboard/data.parquet` and `data.json`.
+- `save_parquet()` serializes normalized flat records (including embedded `d_history` JSON strings) into `restaurant_dashboard/data.parquet` with zstd-19 compression.
+
