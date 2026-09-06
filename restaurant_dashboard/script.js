@@ -160,7 +160,8 @@ function reconstructFromParquet(rows) {
             if (!rest.menus[did]) rest.menus[did] = {
                 id: row.d_id, name: row.d_name || '', price: Number(row.d_price || 0), oldPrice: Number(row.d_oldPrice || 0),
                 description: row.d_desc || '', image: row.d_image || '', isAvailable: !!row.d_avail,
-                isPopular: !!row.d_popular, category: row.d_cat || '', rating: Number(row.d_rating || 0)
+                isPopular: !!row.d_popular, category: row.d_cat || '', rating: Number(row.d_rating || 0),
+                priceHistory: safeJSON(row.d_history, [])
             };
         }
     }

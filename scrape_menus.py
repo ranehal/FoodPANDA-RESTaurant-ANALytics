@@ -581,9 +581,10 @@ def save_parquet(locations, total_r, total_d, scraped_at):
             }
 
             if not menus:
-                rows.append({**base, "d_id": None, "d_name": None, "d_price": 0.0, "d_oldPrice": 0.0, "d_desc": None, "d_image": None, "d_avail": None, "d_popular": None, "d_cat": None, "d_rating": 0.0})
+                rows.append({**base, "d_id": None, "d_name": None, "d_price": 0.0, "d_oldPrice": 0.0, "d_desc": None, "d_image": None, "d_avail": None, "d_popular": None, "d_cat": None, "d_rating": 0.0, "d_history": None})
             else:
                 for dish in menus.values():
+                    p_hist = dish.get("priceHistory") or dish.get("price_history") or []
                     rows.append({
                         **base,
                         "d_id": dish.get("id", 0),
@@ -596,6 +597,7 @@ def save_parquet(locations, total_r, total_d, scraped_at):
                         "d_popular": bool(dish.get("isPopular", False)),
                         "d_cat": dish.get("category", ""),
                         "d_rating": float(dish.get("rating", 0)),
+                        "d_history": json.dumps(p_hist, separators=(',', ':'), ensure_ascii=False) if p_hist else None,
                     })
 
     if not rows:
