@@ -379,11 +379,34 @@ def merge_detail(restaurant, detail):
 
 
 def load_all_existing_history():
-    """Load historical price records across all previous history snapshot JSONs and data.json."""
+    """Load historical price records across data.parquet, previous history snapshot JSONs, and data.json."""
     import glob
     existing_dish_hist = {}
 
-    # 1. Load from all history snapshot files
+    # 1. First priority: load directly and fast from PARQUET_FILE if it exists
+    if os.path.exists(PARQUET_FILE):
+        try:
+            import pyarrow.parquet as pq
+            table = pq.read_table(PARQUET_FILE, columns=['r_id', 'd_id', 'd_history'])
+            r_ids = table['r_id'].to_pylist()
+            d_ids = table['d_id'].to_pylist()
+            d_hists = table['d_history'].to_pylist()
+            for rid, did, h_json in zip(r_ids, d_ids, d_hists):
+                if rid and did and h_json:
+                    key = f"{str(rid).strip()}:{str(did).strip()}"
+                    try:
+                        p_hist = json.loads(h_json) if isinstance(h_json, str) else h_json
+                        if isinstance(p_hist, list) and p_hist:
+                            existing_dish_hist[key] = p_hist
+                    except Exception:
+                        pass
+            if existing_dish_hist:
+                print(f"  [history] Loaded {len(existing_dish_hist)} continuous dish histories instantly from {os.path.basename(PARQUET_FILE)}")
+                return existing_dish_hist
+        except Exception as e:
+            print(f"  [WARN] Failed to load history from parquet: {e}")
+
+    # 2. Fallback: load from all history snapshot files
     hist_dir = os.path.join(DATA_DIR, "history")
     if os.path.exists(hist_dir):
         for f in sorted(glob.glob(os.path.join(hist_dir, "*.json"))):
@@ -501,25 +524,43 @@ def save_output(locations, is_final=False, existing_dish_hist=None):
         for r in loc["restaurants"]
     )
 
-    output = {
-        "locations": merged_locations,
+    # Prepare compact view for JSON / web dashboard:
+    # Keeps current prices without embedding repeating 34-day histories inside every single dish,
+    # keeping JSON files under 4MB while data.parquet preserves the complete 34-day history in 2MB!
+    compact_locations = []
+    for loc in merged_locations:
+        c_loc = {k: v for k, v in loc.items() if k != "restaurants"}
+        c_rests = []
+        for r in loc.get("restaurants", []):
+            cr = {k: v for k, v in r.items() if k != "menus"}
+            cm = {}
+            for did, m in r.get("menus", {}).items():
+                cm[did] = {k: v for k, v in m.items() if k not in ("priceHistory", "price_history", "history")}
+            cr["menus"] = cm
+            c_rests.append(cr)
+        c_loc["restaurants"] = c_rests
+        compact_locations.append(c_loc)
+
+    compact_output = {
+        "locations": compact_locations,
         "totalRestaurants": total_r,
         "totalDishes": total_d,
         "scrapedAt": now_iso,
     }
+
     with _save_lock:
         with open(DATA_FILE, "w", encoding="utf-8") as f:
-            json.dump(output, f, ensure_ascii=False, separators=(',', ':'))
+            json.dump(compact_output, f, ensure_ascii=False, separators=(',', ':'))
 
         # Only build parquet and history snapshot on final save to prevent massive intermediate disk latency
         if is_final:
-            save_parquet(merged_locations, total_r, total_d, output["scrapedAt"])
+            save_parquet(merged_locations, total_r, total_d, now_iso)
             if total_d > 0:
                 hist_dir = os.path.join(DATA_DIR, "history")
                 os.makedirs(hist_dir, exist_ok=True)
                 snapshot_file = os.path.join(hist_dir, f"foodpanda_restaurants_{today_str}.json")
                 with open(snapshot_file, "w", encoding="utf-8") as f:
-                    json.dump(output, f, ensure_ascii=False, separators=(',', ':'))
+                    json.dump(compact_output, f, ensure_ascii=False, separators=(',', ':'))
                 print(f"  [snapshot] Saved daily history: {snapshot_file}")
 
     return total_r, total_d
